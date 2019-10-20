@@ -43,9 +43,8 @@ const StyledNavigation = styled.nav`
     color: ${() => `${LIGHTER_GREY}`};
   }
 
-  > a:active,
   > a:hover {
-    background: ${() => `${GREY}`};
+    outline: ${() => `1px solid ${GREY}`};
   }
 `
 
@@ -74,6 +73,11 @@ const Sidebar = () => {
       <StyledNavigation>
         {NAV_ITEMS.map(item => (
           <Link
+            getProps={({ isCurrent }) => ({
+              style: {
+                background: isCurrent ? GREY : ''
+              }
+            })}
             key={item}
             to={item
               .toLowerCase()
