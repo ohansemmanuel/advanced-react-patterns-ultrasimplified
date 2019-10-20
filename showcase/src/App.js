@@ -1,16 +1,22 @@
 import React, { useState } from 'react'
 import { hot } from 'react-hot-loader'
+import styled from 'styled-components'
+import Sidebar from './Sidebar'
+import Body from './Body'
 
-import './App.css'
+const StyledContainer = styled.div`
+  display: grid;
+  grid:
+    'sidebar body'
+    100vh /24% 1fr;
+`
 
-const App = ({ name }) => {
-  const [count, setCount] = useState(100)
+const App = () => {
   return (
-    <div className='App'>
-      <h1>{`Welcome to ${count}k Euros, ${name}`}</h1>
-      <p>Hola como estas is ...</p>
-      <button onClick={() => setCount(c => c + 1)}>=>=>=></button>
-    </div>
+    <StyledContainer>
+      <Sidebar />
+      <Body />
+    </StyledContainer>
   )
 }
 
