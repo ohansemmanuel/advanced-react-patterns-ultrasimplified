@@ -23,7 +23,7 @@ const Body = () => {
   return (
     <StyledAppBody>
       <Router>
-        <Home default path='/home' />
+        <Home default path='/' />
         <TheMediumClap path='/the-medium-clap' />
         <CompoundComponents path='/compound-components' />
         <ControlProps path='/control-props' />

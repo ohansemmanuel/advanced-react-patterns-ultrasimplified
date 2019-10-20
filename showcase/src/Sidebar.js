@@ -20,7 +20,7 @@ const StyledLogoArea = styled.div`
   position: relative;
   height: ${() => `${HEADER_ALLOWANCE}vh`};
 
-  > img {
+  > svg {
     position: absolute;
     bottom: 0;
   }
@@ -50,7 +50,7 @@ const StyledNavigation = styled.nav`
 
 const LogoArea = () => (
   <StyledLogoArea>
-    <img src={Logo} width='43%' />
+    <Logo style={{ width: '43%' }} />
   </StyledLogoArea>
 )
 
@@ -79,7 +79,7 @@ const Sidebar = () => {
               }
             })}
             key={item}
-            to={item
+            to={item === 'Home' ? '/' : item
               .toLowerCase()
               .split(' ')
               .join('-')}
