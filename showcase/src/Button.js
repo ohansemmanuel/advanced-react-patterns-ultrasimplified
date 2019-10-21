@@ -11,7 +11,7 @@ export const StyledButton = styled.button`
   width: 24vw;
   font-size: 1rem;
   font-family: 'Avenir';
-  font-weight: 400;
+  font-weight: 300;
   padding: 18px 0;
   border-radius: 30px;
   cursor: pointer;
