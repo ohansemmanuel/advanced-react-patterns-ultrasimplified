@@ -14,6 +14,18 @@ import userStyles from './usage.css'
 
 /** ====================================
  *          🔰Hook
+    Hook for Holding Previous Vals
+==================================== **/
+function usePrevious (value) {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current === undefined ? null : ref.current
+}
+
+/** ====================================
+ *          🔰Hook
       Hook for Animation
 ==================================== **/
 
@@ -136,7 +148,8 @@ const callFnsInSequence = (...fns) => (...args) =>
   fns.forEach(fn => fn && fn(...args))
 
 const useClapState = ({ initialState = INIT_STATE } = {}) => {
-  const [clapState, setClapState] = useState(initialState)
+  const initialStateRef = useRef(initialState)
+  const [clapState, setClapState] = useState(initialStateRef.current)
   const { count, countTotal } = clapState
 
   const handleClapClick = useCallback(
@@ -151,12 +164,16 @@ const useClapState = ({ initialState = INIT_STATE } = {}) => {
   )
 
   const resetRef = useRef(0)
+  // reset only if there's a change. It's possible to check changes to other state values e.g. countTotal & isClicked
+  const prevCount = usePrevious(count)
   const reset = useCallback(
     () => {
-      setClapState(initialState)
-      ++resetRef.current
+      if (prevCount !== count) {
+        setClapState(initialStateRef.current)
+        ++resetRef.current
+      }
     },
-    [setClapState]
+    [prevCount, count]
   )
 
   const getTogglerProps = ({ onClick, ...otherProps } = {}) => ({
@@ -369,7 +386,9 @@ const Usage = () => {
         >
           reset
         </button>
-        <pre className={userStyles.resetMsg}>{JSON.stringify({ count, countTotal, isClicked })}</pre>
+        <pre className={userStyles.resetMsg}>
+          {JSON.stringify({ count, countTotal, isClicked })}
+        </pre>
         <pre className={userStyles.resetMsg} style={{ height: '35px' }}>
           {uploadingReset ? `uploading reset ${resetDep}...` : ''}
         </pre>
