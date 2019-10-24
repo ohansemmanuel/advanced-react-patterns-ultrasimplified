@@ -1,0 +1,18 @@
+/** total **/
+
+.total {
+    color: #896EAF;
+}
+
+ /* count */ 
+.count {
+    background: #896EAF; 
+}
+
+ /* clap */ 
+.clap {
+    border: 1px solid #896EAF; 
+}
+.clap:hover {
+    border: 1px solid #896EAF; 
+}
