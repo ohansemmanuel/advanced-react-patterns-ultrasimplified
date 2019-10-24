@@ -177,16 +177,10 @@ const useClapState = ({
 
   const resetRef = useRef(0)
   // reset only if there's a change. It's possible to check changes to other state values e.g. countTotal & isClicked
-  const prevCount = usePrevious(count)
-  const reset = useCallback(
-    () => {
-      if (prevCount !== count) {
-        dispatch({ type: 'reset', payload: initialStateRef.current })
-        ++resetRef.current
-      }
-    },
-    [prevCount, count]
-  )
+  const reset = useCallback(() => {
+    dispatch({ type: 'reset', payload: initialStateRef.current })
+    ++resetRef.current
+  }, [])
 
   const getTogglerProps = ({ onClick, ...otherProps } = {}) => ({
     onClick: callFnsInSequence(handleClapClick, onClick),
@@ -327,13 +321,38 @@ const CountTotal = forwardRef(
 
 const initialState = { count: 10, countTotal: 22, isClicked: false }
 const Usage = () => {
+  const [timesClapped, setTimeClapped] = useState(0)
+  const clappedTooMuch = timesClapped >= 7
+
+  const reducer = (state, { type, payload }) => {
+    const { count, countTotal } = state
+    switch (type) {
+      case 'clap':
+        return !clappedTooMuch
+          ? {
+            count: count + 1,
+            countTotal: countTotal + 1,
+            isClicked: true
+          }
+          : {
+            count,
+            countTotal,
+            isClicked: true
+          }
+      case 'reset':
+        return payload
+      default:
+        return state
+    }
+  }
+
   const {
     clapState,
     getTogglerProps,
     getCounterProps,
     reset,
     resetDep
-  } = useClapState({ initialState })
+  } = useClapState({ initialState, reducer })
   const { count, countTotal, isClicked } = clapState
 
   const [
@@ -349,13 +368,15 @@ const Usage = () => {
   })
 
   const onClick = () => {
-    animationTimeline.replay()
+    setTimeClapped(t => t + 1)
+    !clappedTooMuch && animationTimeline.replay()
   }
 
   // Side effect after reset has occured.
   const [uploadingReset, setUpload] = useState(false)
   useEffectAfterMount(
     () => {
+      setTimeClapped(0)
       setUpload(true)
 
       const id = setTimeout(() => {
@@ -399,12 +420,15 @@ const Usage = () => {
           reset
         </button>
         <pre className={userStyles.resetMsg}>
-          {JSON.stringify({ count, countTotal, isClicked })}
+          {JSON.stringify({ timesClapped, count, countTotal })}
         </pre>
         <pre className={userStyles.resetMsg} style={{ height: '35px' }}>
           {uploadingReset ? `uploading reset ${resetDep}...` : ''}
         </pre>
       </section>
+      <pre style={{ color: 'red' }}>
+        {clappedTooMuch ? `You clapped too much. Don't be so generous!` : ''}
+      </pre>
     </div>
   )
 }
