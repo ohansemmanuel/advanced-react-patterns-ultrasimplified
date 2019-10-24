@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useContext,
   useMemo,
+  useRef,
   createContext
 } from 'react'
 
@@ -117,7 +118,7 @@ const initialState = {
 const MediumClapContext = createContext()
 const { Provider } = MediumClapContext
 
-const MediumClap = ({ children }) => {
+const MediumClap = ({ children, onClap }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
@@ -133,6 +134,18 @@ const MediumClap = ({ children }) => {
       isClicked: true
     })
   }
+
+  const componentJustMounted = useRef(true)
+
+  useEffect(
+    () => {
+      if (!componentJustMounted.current) {
+        onClap(clapState)
+      }
+      componentJustMounted.current = false
+    },
+    [count, onClap]
+  )
 
   const memoizedValue = useMemo(
     () => ({
@@ -190,11 +203,11 @@ const CountTotal = () => {
   )
 }
 
-const ClapInfo = () => {
+const ClapInfo = ({ info }) => {
   const { countTotal } = useContext(MediumClapContext)
   return (
     <div className={styles.info}>
-      {wordConverter.toWords(countTotal)} claps!
+      {info || wordConverter.toWords(countTotal)} claps!
     </div>
   )
 }
@@ -211,12 +224,18 @@ MediumClap.Info = ClapInfo
 ==================================== **/
 
 const Usage = () => {
+  const [total, setTotal] = useState(0)
+
+  const onClap = ({ countTotal }) => {
+    setTotal(countTotal)
+  }
+
   return (
-    <MediumClap>
+    <MediumClap onClap={onClap}>
       <MediumClap.Icon />
       <MediumClap.Total />
       <MediumClap.Count />
-      <MediumClap.Info />
+      <MediumClap.Info info={`Your article has been clapped ${total} times`} />
     </MediumClap>
   )
 }
