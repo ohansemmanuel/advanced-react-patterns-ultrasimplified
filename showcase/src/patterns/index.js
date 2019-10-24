@@ -1,6 +1,7 @@
 import React, {
   useState,
-  useEffect,
+  useCallback,
+  useLayoutEffect,
   useContext,
   useMemo,
   createContext
@@ -16,15 +17,24 @@ import styles from './index.css'
       Hook for Animation
 ==================================== **/
 
-const useClapAnimation = ({ duration: tlDuration }) => {
+const useClapAnimation = ({
+  duration: tlDuration,
+  bounceEl,
+  fadeEl,
+  burstEl
+}) => {
   const [animationTimeline, setAnimationTimeline] = useState(
     new mojs.Timeline()
   )
 
-  useEffect(
+  useLayoutEffect(
     () => {
+      if (!bounceEl || !fadeEl || !burstEl) {
+        return
+      }
+
       const triangleBurst = new mojs.Burst({
-        parent: '#clap',
+        parent: burstEl,
         radius: { 50: 95 },
         count: 5,
         angle: 30,
@@ -43,7 +53,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const circleBurst = new mojs.Burst({
-        parent: '#clap',
+        parent: burstEl,
         radius: { 50: 75 },
         angle: 25,
         duration: tlDuration,
@@ -58,7 +68,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const countAnimation = new mojs.Html({
-        el: '#clapCount',
+        el: bounceEl,
         isShowStart: false,
         isShowEnd: true,
         y: { 0: -30 },
@@ -71,7 +81,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const countTotalAnimation = new mojs.Html({
-        el: '#clapCountTotal',
+        el: fadeEl,
         isShowStart: false,
         isShowEnd: true,
         opacity: { 0: 1 },
@@ -81,14 +91,19 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const scaleButton = new mojs.Html({
-        el: '#clap',
+        el: burstEl,
         duration: tlDuration,
         scale: { 1.3: 1 },
         easing: mojs.easing.out
       })
 
-      const clap = document.getElementById('clap')
-      clap.style.transform = 'scale(1, 1)'
+      if (typeof burstEl === 'string') {
+        clap.style.transform = 'scale(1, 1)'
+        const el = document.getElementById(id)
+        el.style.transform = 'scale(1, 1)'
+      } else {
+        burstEl.style.transform = 'scale(1, 1)'
+      }
 
       const updatedAnimationTimeline = animationTimeline.add([
         countAnimation,
@@ -100,7 +115,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
 
       setAnimationTimeline(updatedAnimationTimeline)
     },
-    [tlDuration, animationTimeline]
+    [tlDuration, animationTimeline, bounceEl, fadeEl, burstEl]
   )
 
   return animationTimeline
@@ -122,9 +137,25 @@ const MediumClap = ({ children }) => {
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
 
-  const animationTimeline = useClapAnimation({ duration: 300 })
+  const [{ clapRef, clapCountRef, clapTotalRef }, setRefState] = useState({})
+
+  const setRef = useCallback(node => {
+    if (node !== null) {
+      setRefState(prevRefState => ({
+        ...prevRefState,
+        [node.dataset.refkey]: node
+      }))
+    }
+  }, [])
+
+  const animationTimeline = useClapAnimation({
+    duration: 300,
+    bounceEl: clapCountRef,
+    fadeEl: clapTotalRef,
+    burstEl: clapRef
+  })
+
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
 
     setClapState({
@@ -138,14 +169,20 @@ const MediumClap = ({ children }) => {
     () => ({
       count,
       countTotal,
-      isClicked
+      isClicked,
+      setRef
     }),
-    [count, countTotal, isClicked]
+    [count, countTotal, isClicked, setRef]
   )
 
   return (
     <Provider value={memoizedValue}>
-      <button id='clap' className={styles.clap} onClick={handleClapClick}>
+      <button
+        ref={setRef}
+        data-refkey='clapRef'
+        className={styles.clap}
+        onClick={handleClapClick}
+      >
         {children}
       </button>
     </Provider>
@@ -174,17 +211,17 @@ const ClapIcon = () => {
   )
 }
 const ClapCount = () => {
-  const { count } = useContext(MediumClapContext)
+  const { count, setRef } = useContext(MediumClapContext)
   return (
-    <span id='clapCount' className={styles.count}>
+    <span ref={setRef} data-refkey='clapCountRef' className={styles.count}>
       +{count}
     </span>
   )
 }
 const CountTotal = () => {
-  const { countTotal } = useContext(MediumClapContext)
+  const { countTotal, setRef } = useContext(MediumClapContext)
   return (
-    <span id='clapCountTotal' className={styles.total}>
+    <span ref={setRef} data-refkey='clapTotalRef' className={styles.total}>
       {countTotal}
     </span>
   )
