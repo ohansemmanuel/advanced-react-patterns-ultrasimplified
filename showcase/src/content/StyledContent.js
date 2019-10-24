@@ -35,6 +35,7 @@ export const Column = styled.div`
 `
 
 export const DisplayBox = styled.div`
+  position: relative;
   width: 100%;
   min-height: 47vh;
   padding: ${() => `${SIDEBAR_LEFT_PADDING}vw`};
@@ -46,6 +47,11 @@ export const DisplayBox = styled.div`
     top: -13px;
     left: -7px;
   }
+  > aside {
+    text-align: center;
+    position: relative;
+    bottom: -10px;
+  }
 `
 
 const TagLine = styled.p`
@@ -56,7 +62,16 @@ const TagLine = styled.p`
   transform: rotateZ(-4.75deg) translateY(-15px);
   color: ${({ isPrimary }) => (isPrimary ? OX : PALE_BLUE)};
 `
-export const Box = ({ isPrimary }) => {
+
+const Center = styled.div`
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh;
+`
+
+export const Box = ({ isPrimary, children, note }) => {
   return (
     <DisplayBox>
       <TagLine isPrimary={isPrimary}>{isPrimary ? 'Before' : 'After'}</TagLine>
@@ -65,6 +80,8 @@ export const Box = ({ isPrimary }) => {
       ) : (
         <ArrowBlue style={{ width: '80px' }} />
       )}
+      <Center>{children}</Center>
+      {note && <aside>{note}</aside>}
     </DisplayBox>
   )
 }
