@@ -148,7 +148,7 @@ const INIT_STATE = {
 const callFnsInSequence = (...fns) => (...args) =>
   fns.forEach(fn => fn && fn(...args))
 
-const clapReducer = (state, { type, initialState }) => {
+const clapReducer = (state, { type, payload }) => {
   const { count, countTotal } = state
 
   switch (type) {
@@ -159,7 +159,7 @@ const clapReducer = (state, { type, initialState }) => {
         isClicked: true
       }
     case 'reset':
-      return initialState
+      return payload
     default:
       return state
   }
@@ -181,7 +181,7 @@ const useClapState = ({
   const reset = useCallback(
     () => {
       if (prevCount !== count) {
-        dispatch({ type: 'reset', initialState: initialStateRef.current })
+        dispatch({ type: 'reset', payload: initialStateRef.current })
         ++resetRef.current
       }
     },
