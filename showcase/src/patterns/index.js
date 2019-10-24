@@ -1,4 +1,5 @@
 import React, {
+  useReducer,
   useState,
   useEffect,
   useCallback,
@@ -147,21 +148,32 @@ const INIT_STATE = {
 const callFnsInSequence = (...fns) => (...args) =>
   fns.forEach(fn => fn && fn(...args))
 
-const useClapState = ({ initialState = INIT_STATE } = {}) => {
-  const initialStateRef = useRef(initialState)
-  const [clapState, setClapState] = useState(initialStateRef.current)
-  const { count, countTotal } = clapState
+const clapReducer = (state, { type, initialState }) => {
+  const { count, countTotal } = state
 
-  const handleClapClick = useCallback(
-    () => {
-      setClapState({
-        count: Math.min(count + 1, MAX_CLAP),
-        countTotal: count < MAX_CLAP ? countTotal + 1 : countTotal,
+  switch (type) {
+    case 'clap':
+      return {
+        count: count + 1,
+        countTotal: countTotal + 1,
         isClicked: true
-      })
-    },
-    [count, countTotal]
-  )
+      }
+    case 'reset':
+      return initialState
+    default:
+      return state
+  }
+}
+
+const useClapState = ({
+  initialState = INIT_STATE,
+  reducer = clapReducer
+} = {}) => {
+  const initialStateRef = useRef(initialState)
+  const [clapState, dispatch] = useReducer(reducer, initialStateRef.current)
+  const { count } = clapState
+
+  const handleClapClick = () => dispatch({ type: 'clap' })
 
   const resetRef = useRef(0)
   // reset only if there's a change. It's possible to check changes to other state values e.g. countTotal & isClicked
@@ -169,7 +181,7 @@ const useClapState = ({ initialState = INIT_STATE } = {}) => {
   const reset = useCallback(
     () => {
       if (prevCount !== count) {
-        setClapState(initialStateRef.current)
+        dispatch({ type: 'reset', initialState: initialStateRef.current })
         ++resetRef.current
       }
     },
