@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  createContext
+} from 'react'
+
 import mojs from 'mo-js'
+import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
@@ -106,7 +114,10 @@ const initialState = {
   isClicked: false
 }
 
-const MediumClap = () => {
+const MediumClapContext = createContext()
+const { Provider } = MediumClapContext
+
+const MediumClap = ({ children }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
@@ -123,12 +134,21 @@ const MediumClap = () => {
     })
   }
 
+  const memoizedValue = useMemo(
+    () => ({
+      count,
+      countTotal,
+      isClicked
+    }),
+    [count, countTotal, isClicked]
+  )
+
   return (
-    <button id='clap' className={styles.clap} onClick={handleClapClick}>
-      <ClapIcon isClicked={isClicked} />
-      <ClapCount count={count} />
-      <CountTotal countTotal={countTotal} />
-    </button>
+    <Provider value={memoizedValue}>
+      <button id='clap' className={styles.clap} onClick={handleClapClick}>
+        {children}
+      </button>
+    </Provider>
   )
 }
 
@@ -137,7 +157,8 @@ const MediumClap = () => {
 Smaller Component used by <MediumClap />
 ==================================== **/
 
-const ClapIcon = ({ isClicked }) => {
+const ClapIcon = () => {
+  const { isClicked } = useContext(MediumClapContext)
   return (
     <span>
       <svg
@@ -152,20 +173,36 @@ const ClapIcon = ({ isClicked }) => {
     </span>
   )
 }
-const ClapCount = ({ count }) => {
+const ClapCount = () => {
+  const { count } = useContext(MediumClapContext)
   return (
     <span id='clapCount' className={styles.count}>
       +{count}
     </span>
   )
 }
-const CountTotal = ({ countTotal }) => {
+const CountTotal = () => {
+  const { countTotal } = useContext(MediumClapContext)
   return (
     <span id='clapCountTotal' className={styles.total}>
       {countTotal}
     </span>
   )
 }
+
+const ClapInfo = () => {
+  const { countTotal } = useContext(MediumClapContext)
+  return (
+    <div className={styles.info}>
+      {wordConverter.toWords(countTotal)} claps!
+    </div>
+  )
+}
+
+MediumClap.Icon = ClapIcon
+MediumClap.Count = ClapCount
+MediumClap.Total = CountTotal
+MediumClap.Info = ClapInfo
 
 /** ====================================
     *        🔰USAGE
@@ -174,7 +211,14 @@ const CountTotal = ({ countTotal }) => {
 ==================================== **/
 
 const Usage = () => {
-  return <MediumClap />
+  return (
+    <MediumClap>
+      <MediumClap.Icon />
+      <MediumClap.Total />
+      <MediumClap.Count />
+      <MediumClap.Info />
+    </MediumClap>
+  )
 }
 
 export default Usage
