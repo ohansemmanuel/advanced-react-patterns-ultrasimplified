@@ -4,6 +4,7 @@ import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
 /** ====================================
+ *      🔰 SubComponents
 Smaller Component for Medium Clap
 ==================================== **/
 
@@ -70,6 +71,7 @@ const MediumClap = ({ animationTimeline }) => {
 }
 
 /** ====================================
+ *          🔰HOC
 Higher Order Component for Animation
 ==================================== **/
 const withClapAnimation = WrappedComponent => {
@@ -178,9 +180,9 @@ function getDisplayName (WrappedComponent) {
 }
 
 /** ====================================
-            🔰USAGE
-    Below's how a potention user may consume
-    the component API
+    *        🔰USAGE
+    Below's how a potention user
+    may consumethe component API
 ==================================== **/
 
 const Usage = () => {
