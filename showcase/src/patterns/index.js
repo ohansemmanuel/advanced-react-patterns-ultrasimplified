@@ -4,7 +4,7 @@ import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
 /** ====================================
- *      🔰 SubComponents
+ *      🔰SubComponents
 Smaller Component for Medium Clap
 ==================================== **/
 
@@ -184,8 +184,8 @@ function getDisplayName (WrappedComponent) {
 
 /** ====================================
     *        🔰USAGE
-    Below's how a potention user
-    may consumethe component API
+    Below's how a potential user
+    may consume the component API
 ==================================== **/
 
 const Usage = () => {
