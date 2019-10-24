@@ -11,7 +11,8 @@ import {
   PropsCollection,
   PropGetters,
   StateInitializers,
-  StateReducers
+  StateReducers,
+  ReusableStyles
 } from './content'
 
 const StyledAppBody = styled.div`
@@ -26,6 +27,7 @@ const Body = () => {
         <Home default path='/' />
         <TheMediumClap path='/the-medium-clap' />
         <CompoundComponents path='/compound-components' />
+        <ReusableStyles path='reusable-styles' />
         <ControlProps path='/control-props' />
         <CustomHooks path='/custom-hooks' />
         <PropsCollection path='/props-collection' />

@@ -9,17 +9,17 @@ import {
 } from './StyledContent'
 import GithubLogo from '../assets/github_logo.svg'
 import Button from '../Button'
-import Usage from '../patterns/01'
-import Usage2 from '../patterns/02'
+import Usage3 from '../patterns/03'
+import Usage4 from '../patterns/04'
 
-export const TheMediumClap = () => (
+export const ReusableStyles = () => (
   <StyledContentContainer>
-    <H1>The Medium Clap</H1>
+    <H1>Reusable Styles </H1>
 
     <Columns>
       <Column>
         <Box isPrimary>
-          <Usage />
+          <Usage3 />
         </Box>
         <CTAContainer alignRight>
           <Button text='Why medium clap?' primary />
@@ -27,7 +27,7 @@ export const TheMediumClap = () => (
       </Column>
       <Column leftGap>
         <Box>
-          <Usage2 />
+          <Usage4 />
         </Box>
         <CTAContainer>
           <Button

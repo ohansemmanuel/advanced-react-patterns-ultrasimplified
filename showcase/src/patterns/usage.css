@@ -1,0 +1,56 @@
+/** total **/
+
+.total {
+    color: #896EAF;
+}
+
+ /* count */ 
+.count {
+    background: #896EAF; 
+}
+
+ /* clap */ 
+.clap {
+    border: 1px solid #896EAF; 
+}
+.clap:hover {
+    border: 1px solid #896EAF; 
+}
+
+.cupContainer {
+    width: 100px;
+    min-height: 100px;
+    text-align: center;
+}
+
+.cupBody {
+    display: flex;
+}
+.cupStream > svg{
+    height: 40px;
+}
+.cupBody > svg {
+    min-height: 50px;
+}
+/* 1. cup handle  2. cup bowl*/
+.cupBody > svg:nth-child(1) {
+    width: 20%;
+}
+.cupBody > svg:nth-child(2) {
+    width: 80%;
+    position: relative;
+    right: 10px;
+}
+.resetBtn {
+    border-bottom: 1px solid #bdc3c7;
+    color: '#27ae60';
+    margin-top: 30px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    outline: 0;
+    display: block;
+    width: 100%;
+}
+.resetMsg {
+    color: black;
+}

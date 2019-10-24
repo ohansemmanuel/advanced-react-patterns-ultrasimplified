@@ -58,6 +58,7 @@ const NAV_ITEMS = [
   'Home',
   'The Medium Clap',
   'Compound Components',
+  'Reusable Styles',
   'Control Props',
   'Custom Hooks',
   'Props Collection',
@@ -79,10 +80,14 @@ const Sidebar = () => {
               }
             })}
             key={item}
-            to={item === 'Home' ? '/' : item
-              .toLowerCase()
-              .split(' ')
-              .join('-')}
+            to={
+              item === 'Home'
+                ? '/'
+                : item
+                  .toLowerCase()
+                  .split(' ')
+                  .join('-')
+            }
           >
             {item}
           </Link>
