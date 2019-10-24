@@ -45,6 +45,7 @@ const initialState = {
 
 // 👉 Medium Clap
 const MediumClap = ({ animationTimeline }) => {
+  const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
 
@@ -53,8 +54,8 @@ const MediumClap = ({ animationTimeline }) => {
     animationTimeline.replay()
 
     setClapState({
-      count: Math.min(count + 1, 50),
-      countTotal: countTotal + 1,
+      count: Math.min(count + 1, MAXIMUM_USER_CLAP),
+      countTotal: count < MAXIMUM_USER_CLAP ? countTotal + 1 : countTotal,
       isClicked: true
     })
   }
