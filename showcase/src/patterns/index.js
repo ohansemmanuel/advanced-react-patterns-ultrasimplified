@@ -10,7 +10,6 @@ import React, {
 } from 'react'
 
 import mojs from 'mo-js'
-import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 import userStyles from './usage.css'
@@ -123,14 +122,65 @@ const useClapAnimation = ({
 
   return animationTimeline
 }
+
 /** ====================================
- *      🔰 MediumClap
+ *          🔰Hook
+      Hook for Clap State
 ==================================== **/
-const initialState = {
+
+const NO_OP = () => {}
+const INIT_STATE = {
   count: 0,
   countTotal: generateRandomNumber(500, 10000),
   isClicked: false
 }
+const MAX_CLAP = 50
+
+const useClapState = ({
+  initialState = INIT_STATE,
+  isControlled = false,
+  values = null,
+  onClap = NO_OP
+}) => {
+  const [clapState, setClapState] = useState(initialState)
+  const { count, countTotal } = clapState
+
+  const handleClapClick = () => {
+    isControlled
+      ? onClap()
+      : setClapState({
+        count: Math.min(count + 1, MAX_CLAP),
+        countTotal: count < MAX_CLAP ? countTotal + 1 : countTotal,
+        isClicked: true
+      })
+  }
+
+  return {
+    clapState: isControlled ? values : clapState,
+    setClapState: handleClapClick
+  }
+}
+
+/** ====================================
+ *          🔰Hook
+      useEffectAfterMount
+==================================== **/
+
+function useEffectAfterMount (cb, deps) {
+  const componentJustMounted = useRef(true)
+  useEffect(() => {
+    if (!componentJustMounted.current) {
+      return cb()
+    }
+    componentJustMounted.current = false
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps)
+}
+
+/** ====================================
+ *      🔰 MediumClap
+==================================== **/
 
 const MediumClapContext = createContext()
 const { Provider } = MediumClapContext
@@ -142,10 +192,15 @@ const MediumClap = ({
   className = '',
   style: userStyles = {}
 }) => {
-  const MAXIMUM_USER_CLAP = 50
-  const [clapState, setClapState] = useState(initialState)
-  const { count, countTotal, isClicked } = clapState
+  // Controlled Component ? isControlled = value !== undefined
+  const isControlled = !!values
 
+  const { clapState, setClapState } = useClapState({
+    isControlled,
+    values,
+    onClap
+  })
+  const { count } = clapState
   const [{ clapRef, clapCountRef, clapTotalRef }, setRefState] = useState({})
 
   const setRef = useCallback(node => {
@@ -164,47 +219,28 @@ const MediumClap = ({
     burstEl: clapRef
   })
 
-  // Controlled Component ? isControlled = value !== undefined
-  const isControlled = !!values
-
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
-    isControlled
-      ? onClap()
-      : setClapState({
-        count: Math.min(count + 1, MAXIMUM_USER_CLAP),
-        countTotal: count < MAXIMUM_USER_CLAP ? countTotal + 1 : countTotal,
-        isClicked: true
-      })
+    setClapState()
   }
 
-  const componentJustMounted = useRef(true)
-
-  useEffect(
+  useEffectAfterMount(
     () => {
-      if (!componentJustMounted.current && !isControlled) {
-        onClap(clapState)
+      if (!isControlled) {
+        onClap(count)
       }
-      componentJustMounted.current = false
     },
     [count, onClap, isControlled]
   )
 
-  const getState = useCallback(() => (isControlled ? values : clapState), [
-    isControlled,
-    clapState,
-    values
-  ])
-
   const memoizedValue = useMemo(
     () => {
       return {
-        ...getState(),
+        ...clapState,
         setRef
       }
     },
-    [getState, setRef]
+    [clapState, setRef]
   )
 
   const classNames = [styles.clap, className].join(' ').trim()
@@ -284,11 +320,7 @@ const CountTotal = ({ className = '', style: userStyles = {} }) => {
 
 const ClapInfo = ({ info }) => {
   const { countTotal } = useContext(MediumClapContext)
-  return (
-    <div className={styles.info}>
-      {info || wordConverter.toWords(countTotal)} claps!
-    </div>
-  )
+  return <div className={styles.info}>{info || countTotal} claps!</div>
 }
 
 MediumClap.Icon = ClapIcon
@@ -302,39 +334,97 @@ MediumClap.Info = ClapInfo
     may consume the component API
 ==================================== **/
 
-const MAXIMUM_USER_CLAP = 10
-const INITIAL_STATE = {
-  count: 0,
-  countTotal: 1206,
-  isClicked: false
+const CupBowl = () => {
+  // Credit: Created by Kieu Thi Kim Cuong from the Noun Project
+  return (
+    <svg
+      id='cupBowl'
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 26.09 13.71'
+    >
+      <g>
+        <path d='M26.06.36A.54.54 0 0 0 26 .18h-.05l-.1-.07a.32.32 0 0 0-.09 0H.5A.5.5 0 0 0 0 .5v.06c.09.69.21 1.38.35 2.07a.65.65 0 0 1 0 .53.65.65 0 0 1 .07.56.7.7 0 0 1 0 .76 6.18 6.18 0 0 1 .35 1.66.6.6 0 0 1 .14.45.6.6 0 0 1 .09.32.64.64 0 0 1 .33.79 5.94 5.94 0 0 1 1.1 2.84.48.48 0 0 1 .38.18.58.58 0 0 1 .4.16.58.58 0 0 1 .36.36h.06c.27.45.55.9.85 1.33a2.54 2.54 0 0 0 2.1 1.1h12.85a3 3 0 0 0 .73-.11.51.51 0 0 0 .7-.1c.2-.27.38-.55.57-.82a.34.34 0 0 0 .08-.09c.06-.09.12-.19.19-.28l.41-.65c.31-.48.6-1 .87-1.48l.41-.79c.25-.5.48-1 .7-1.52l.33-.79c.1-.26.19-.53.29-.79s.19-.53.27-.81.17-.56.25-.84.15-.52.22-.78.15-.66.22-1 .1-.43.14-.65c.1-.55.19-1.11.26-1.67a.44.44 0 0 0-.01-.14z' />
+      </g>
+    </svg>
+  )
+}
+
+const CupHandle = () => {
+  // Credit: Created by Kieu Thi Kim Cuong from the Noun Project
+  return (
+    <svg
+      id='cupHandle'
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 7.59 7.81'
+    >
+      <g>
+        <path
+          d='M2.19 6.08C1.09 5.21.19 3.62.6 2.29A2.66 2.66 0 0 1 2.36.55a3.8 3.8 0 0 1 1.82.2 27.34 27.34 0 0 0 2.55 6.53 7.33 7.33 0 0 1-4.54-1.2z'
+          fill='none'
+          stroke='#000'
+          strokeMiterlimit='10'
+        />
+      </g>
+    </svg>
+  )
+}
+
+const Stream = () => {
+  // Credit: Created by Kieu Thi Kim Cuong from the Noun Project
+  return (
+    <svg
+      id='stream'
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 10.03 22.44'
+    >
+      <g>
+        <path d='M7.53 22.35a.5.5 0 0 0 .69-.13A10 10 0 0 0 8 10.43a5.14 5.14 0 0 1 1.52-7.51.49.49 0 0 0 .13-.69.5.5 0 0 0-.65-.17 6.14 6.14 0 0 0-1.8 9 9 9 0 0 1 .2 10.59.5.5 0 0 0 .12.69zM1.54 20.35a.5.5 0 0 0 .69-.12A10 10 0 0 0 2 8.44a5.15 5.15 0 0 1 1-7.2c.15-.11.31-.21.47-.31a.5.5 0 0 0 .24-.68A.51.51 0 0 0 3 .07 6.15 6.15 0 0 0 .85 8.48c.12.19.24.38.38.56a9 9 0 0 1 .18 10.61.51.51 0 0 0 .13.7z' />
+      </g>
+    </svg>
+  )
+}
+
+const CupBase = () => {
+  // Credit: Created by Kieu Thi Kim Cuong from the Noun Project
+  return (
+    <svg id='cupBase' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 21.76 1'>
+      <g>
+        <path d='M21.26 0H.5a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5h20.76a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5z' />
+      </g>
+    </svg>
+  )
 }
 
 const Usage = () => {
-  const [clapValues, setClapValues] = useState(INITIAL_STATE)
+  const animationTimeline = useClapAnimation({
+    duration: 300,
+    bounceEl: '#stream',
+    fadeEl: '#cupHandle',
+    burstEl: '#coffee'
+  })
 
-  const onClap = () => {
-    setClapValues(({ count, countTotal }) => ({
-      count: Math.min(count + 1, MAXIMUM_USER_CLAP),
-      countTotal: count < MAXIMUM_USER_CLAP ? countTotal + 1 : countTotal,
-      isClicked: true
-    }))
+  const handleClick = () => {
+    animationTimeline.replay()
   }
 
   return (
-    <section
-      style={{ display: 'flex', justifyContent: 'space-around', width: '60vw' }}
-    >
-      <MediumClap values={clapValues} onClap={onClap}>
-        <MediumClap.Icon />
-        <MediumClap.Count />
-        <MediumClap.Total />
-      </MediumClap>
-
-      <MediumClap className={styles.clap} values={clapValues} onClap={onClap}>
-        <MediumClap.Icon />
-        <MediumClap.Count />
-        <MediumClap.Total />
-      </MediumClap>
+    <section className={userStyles.cupContainer}>
+      <div className={userStyles.cupStream}>
+        <Stream />
+      </div>
+      <div id='coffee' style={{ fontSize: '0.5rem' }}>
+        coffee
+      </div>
+      <div className={userStyles.cupBody}>
+        <CupHandle />
+        <CupBowl />
+      </div>
+      <div>
+        <CupBase />
+      </div>
+      <footer>
+        <button onClick={handleClick}>Animate</button>
+      </footer>
     </section>
   )
 }
