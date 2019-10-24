@@ -152,13 +152,13 @@ const clapReducer = (state, { type, payload }) => {
   const { count, countTotal } = state
 
   switch (type) {
-    case 'clap':
+    case useClapState.types.clap:
       return {
         count: count + 1,
         countTotal: countTotal + 1,
         isClicked: true
       }
-    case 'reset':
+    case useClapState.types.reset:
       return payload
     default:
       return state
@@ -203,6 +203,12 @@ const useClapState = ({
     reset,
     resetDep: resetRef.current
   }
+}
+
+useClapState.reducer = clapReducer
+useClapState.types = {
+  clap: 'clap',
+  reset: 'reset'
 }
 
 /** ====================================
@@ -324,26 +330,11 @@ const Usage = () => {
   const [timesClapped, setTimeClapped] = useState(0)
   const clappedTooMuch = timesClapped >= 7
 
-  const reducer = (state, { type, payload }) => {
-    const { count, countTotal } = state
-    switch (type) {
-      case 'clap':
-        return !clappedTooMuch
-          ? {
-            count: count + 1,
-            countTotal: countTotal + 1,
-            isClicked: true
-          }
-          : {
-            count,
-            countTotal,
-            isClicked: true
-          }
-      case 'reset':
-        return payload
-      default:
-        return state
+  const reducer = (state, action) => {
+    if (action.type === useClapState.types.clap && clappedTooMuch) {
+      return state
     }
+    return useClapState.reducer(state, action)
   }
 
   const {
