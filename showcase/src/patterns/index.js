@@ -3,10 +3,8 @@ import React, {
   useEffect,
   useCallback,
   useLayoutEffect,
-  useContext,
-  useMemo,
-  useRef,
-  createContext
+  forwardRef,
+  useRef
 } from 'react'
 
 import mojs from 'mo-js'
@@ -127,37 +125,31 @@ const useClapAnimation = ({
  *          🔰Hook
       Hook for Clap State
 ==================================== **/
-
-const NO_OP = () => {}
+const MAX_CLAP = 50
 const INIT_STATE = {
   count: 0,
   countTotal: generateRandomNumber(500, 10000),
   isClicked: false
 }
-const MAX_CLAP = 50
 
-const useClapState = ({
-  initialState = INIT_STATE,
-  isControlled = false,
-  values = null,
-  onClap = NO_OP
-}) => {
+const useClapState = ({ initialState = INIT_STATE } = {}) => {
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal } = clapState
 
-  const handleClapClick = () => {
-    isControlled
-      ? onClap()
-      : setClapState({
+  const handleClapClick = useCallback(
+    () => {
+      setClapState({
         count: Math.min(count + 1, MAX_CLAP),
         countTotal: count < MAX_CLAP ? countTotal + 1 : countTotal,
         isClicked: true
       })
-  }
+    },
+    [count, countTotal]
+  )
 
   return {
-    clapState: isControlled ? values : clapState,
-    setClapState: handleClapClick
+    clapState,
+    handleClapClick
   }
 }
 
@@ -173,91 +165,69 @@ function useEffectAfterMount (cb, deps) {
       return cb()
     }
     componentJustMounted.current = false
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
+}
+
+/** ====================================
+ *          🔰Hook
+          useDOMRef
+==================================== **/
+const useDOMRef = () => {
+  const [DOMRef, setDOMRef] = useState({})
+  const setRef = useCallback(node => {
+    if (node !== null) {
+      setDOMRef(prevDOMRefs => ({
+        ...prevDOMRefs,
+        [node.dataset.refkey]: node
+      }))
+    }
+  }, [])
+
+  return [DOMRef, setRef]
 }
 
 /** ====================================
  *      🔰 MediumClap
 ==================================== **/
 
-const MediumClapContext = createContext()
-const { Provider } = MediumClapContext
+const MediumClap = () => {
+  const { clapState, handleClapClick } = useClapState()
+  const { count, countTotal, isClicked } = clapState
 
-const MediumClap = ({
-  children,
-  onClap = () => {},
-  values = null,
-  className = '',
-  style: userStyles = {}
-}) => {
-  // Controlled Component ? isControlled = value !== undefined
-  const isControlled = !!values
-
-  const { clapState, setClapState } = useClapState({
-    isControlled,
-    values,
-    onClap
-  })
-  const { count } = clapState
-  const [{ clapRef, clapCountRef, clapTotalRef }, setRefState] = useState({})
-
-  const setRef = useCallback(node => {
-    if (node !== null) {
-      setRefState(prevRefState => ({
-        ...prevRefState,
-        [node.dataset.refkey]: node
-      }))
-    }
-  }, [])
+  const [
+    { clapContainerRef, clapCountRef, countTotalRef },
+    setRef
+  ] = useDOMRef()
 
   const animationTimeline = useClapAnimation({
     duration: 300,
     bounceEl: clapCountRef,
-    fadeEl: clapTotalRef,
-    burstEl: clapRef
+    fadeEl: countTotalRef,
+    burstEl: clapContainerRef
   })
-
-  const handleClapClick = () => {
-    animationTimeline.replay()
-    setClapState()
-  }
 
   useEffectAfterMount(
     () => {
-      if (!isControlled) {
-        onClap(count)
-      }
+      animationTimeline.replay()
     },
-    [count, onClap, isControlled]
+    [count]
   )
-
-  const memoizedValue = useMemo(
-    () => {
-      return {
-        ...clapState,
-        setRef
-      }
-    },
-    [clapState, setRef]
-  )
-
-  const classNames = [styles.clap, className].join(' ').trim()
 
   return (
-    <Provider value={memoizedValue}>
-      <button
+    <ClapContainer
+      ref={setRef}
+      handleClick={handleClapClick}
+      data-refkey='clapContainerRef'
+    >
+      <ClapIcon isClicked={isClicked} />
+      <ClapCount ref={setRef} count={count} data-refkey='clapCountRef' />
+      <CountTotal
         ref={setRef}
-        data-refkey='clapRef'
-        className={styles.clap}
-        onClick={handleClapClick}
-        className={classNames}
-        style={userStyles}
-      >
-        {children}
-      </button>
-    </Provider>
+        data-refkey='countTotalRef'
+        countTotal={countTotal}
+      />
+    </ClapContainer>
   )
 }
 
@@ -266,8 +236,28 @@ const MediumClap = ({
 Smaller Component used by <MediumClap />
 ==================================== **/
 
-const ClapIcon = ({ className = '', style: userStyles = {} }) => {
-  const { isClicked } = useContext(MediumClapContext)
+const ClapContainer = forwardRef(
+  (
+    { children, handleClick, className, style: userStyles = {}, ...restProps },
+    ref
+  ) => {
+    const classNames = [styles.clap, className].join(' ').trim()
+
+    return (
+      <button
+        onClick={handleClick}
+        className={classNames}
+        style={userStyles}
+        ref={ref}
+        {...restProps}
+      >
+        {children}
+      </button>
+    )
+  }
+)
+
+const ClapIcon = ({ className = '', style: userStyles = {}, isClicked }) => {
   const classNames = [styles.icon, isClicked ? styles.checked : '', className]
     .join(' ')
     .trim()
@@ -287,46 +277,33 @@ const ClapIcon = ({ className = '', style: userStyles = {} }) => {
     </span>
   )
 }
-const ClapCount = ({ className = '', style: userStyles = {} }) => {
-  const { count, setRef } = useContext(MediumClapContext)
-  const classNames = [styles.count, className].join(' ').trim()
 
-  return (
-    <span
-      ref={setRef}
-      data-refkey='clapCountRef'
-      className={classNames}
-      style={userStyles}
-    >
-      +{count}
-    </span>
-  )
-}
-const CountTotal = ({ className = '', style: userStyles = {} }) => {
-  const { countTotal, setRef } = useContext(MediumClapContext)
-  const classNames = [styles.total, className].join(' ').trim()
+const ClapCount = forwardRef(
+  ({ count, className = '', style: userStyles = {}, ...restProps }, ref) => {
+    const classNames = [styles.count, className].join(' ').trim()
 
-  return (
-    <span
-      ref={setRef}
-      data-refkey='clapTotalRef'
-      className={classNames}
-      style={userStyles}
-    >
-      {countTotal}
-    </span>
-  )
-}
+    return (
+      <span ref={ref} className={classNames} style={userStyles} {...restProps}>
+        +{count}
+      </span>
+    )
+  }
+)
 
-const ClapInfo = ({ info }) => {
-  const { countTotal } = useContext(MediumClapContext)
-  return <div className={styles.info}>{info || countTotal} claps!</div>
-}
+const CountTotal = forwardRef(
+  (
+    { countTotal, className = '', style: userStyles = {}, ...restProps },
+    ref
+  ) => {
+    const classNames = [styles.total, className].join(' ').trim()
 
-MediumClap.Icon = ClapIcon
-MediumClap.Count = ClapCount
-MediumClap.Total = CountTotal
-MediumClap.Info = ClapInfo
+    return (
+      <span ref={ref} className={classNames} style={userStyles} {...restProps}>
+        {countTotal}
+      </span>
+    )
+  }
+)
 
 /** ====================================
     *        🔰USAGE
@@ -396,37 +373,7 @@ const CupBase = () => {
 }
 
 const Usage = () => {
-  const animationTimeline = useClapAnimation({
-    duration: 300,
-    bounceEl: '#stream',
-    fadeEl: '#cupHandle',
-    burstEl: '#coffee'
-  })
-
-  const handleClick = () => {
-    animationTimeline.replay()
-  }
-
-  return (
-    <section className={userStyles.cupContainer}>
-      <div className={userStyles.cupStream}>
-        <Stream />
-      </div>
-      <div id='coffee' style={{ fontSize: '0.5rem' }}>
-        coffee
-      </div>
-      <div className={userStyles.cupBody}>
-        <CupHandle />
-        <CupBowl />
-      </div>
-      <div>
-        <CupBase />
-      </div>
-      <footer>
-        <button onClick={handleClick}>Animate</button>
-      </footer>
-    </section>
-  )
+  return <MediumClap />
 }
 
 export default Usage
