@@ -44,7 +44,10 @@ const initialState = {
   isClicked: false
 }
 
-// 👉 Medium Clap
+/** ====================================
+ *      🔰 MediumClap
+==================================== **/
+
 const MediumClap = ({ animationTimeline }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
