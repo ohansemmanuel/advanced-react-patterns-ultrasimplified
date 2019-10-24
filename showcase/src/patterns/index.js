@@ -1,21 +1,20 @@
-import React, { Component, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import mojs from 'mo-js'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
 /** ====================================
- *          🔰HOC
-Higher Order Component for Animation
+ *          🔰Hook
+      Hook for Animation
 ==================================== **/
-const withClapAnimation = WrappedComponent => {
-  class WithClapAnimation extends Component {
-    state = {
-      animationTimeline: new mojs.Timeline()
-    }
 
-    componentDidMount () {
-      const tlDuration = 300
+const useClapAnimation = ({ duration: tlDuration }) => {
+  const [animationTimeline, setAnimationTimeline] = useState(
+    new mojs.Timeline()
+  )
 
+  useEffect(
+    () => {
       const triangleBurst = new mojs.Burst({
         parent: '#clap',
         radius: { 50: 95 },
@@ -82,36 +81,22 @@ const withClapAnimation = WrappedComponent => {
 
       const clap = document.getElementById('clap')
       clap.style.transform = 'scale(1, 1)'
-      this.state.animationTimeline.add([
+
+      const updatedAnimationTimeline = animationTimeline.add([
         countAnimation,
         countTotalAnimation,
         scaleButton,
         circleBurst,
         triangleBurst
       ])
-    }
 
-    render () {
-      return (
-        <WrappedComponent
-          animationTimeline={this.state.animationTimeline}
-          {...this.props}
-        />
-      )
-    }
-  }
+      setAnimationTimeline(updatedAnimationTimeline)
+    },
+    [tlDuration, animationTimeline]
+  )
 
-  WithClapAnimation.displayName = `WithClapAnimation(${getDisplayName(
-    WrappedComponent
-  )})`
-
-  return WithClapAnimation
+  return animationTimeline
 }
-
-function getDisplayName (WrappedComponent) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component'
-}
-
 /** ====================================
  *      🔰 MediumClap
 ==================================== **/
@@ -121,11 +106,12 @@ const initialState = {
   isClicked: false
 }
 
-const MediumClap = ({ animationTimeline }) => {
+const MediumClap = () => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
 
+  const animationTimeline = useClapAnimation({ duration: 300 })
   const handleClapClick = () => {
     // 👉 prop from HOC
     animationTimeline.replay()
@@ -188,8 +174,7 @@ const CountTotal = ({ countTotal }) => {
 ==================================== **/
 
 const Usage = () => {
-  const AnimatedMediumClap = withClapAnimation(MediumClap)
-  return <AnimatedMediumClap />
+  return <MediumClap />
 }
 
 export default Usage
