@@ -132,6 +132,9 @@ const INIT_STATE = {
   isClicked: false
 }
 
+const callFnsInSequence = (...fns) => (...args) =>
+  fns.forEach(fn => fn && fn(...args))
+
 const useClapState = ({ initialState = INIT_STATE } = {}) => {
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal } = clapState
@@ -147,22 +150,24 @@ const useClapState = ({ initialState = INIT_STATE } = {}) => {
     [count, countTotal]
   )
 
-  const togglerProps = {
-    onClick: handleClapClick,
-    'aria-pressed': clapState.isClicked
-  }
+  const getTogglerProps = ({ onClick, ...otherProps } = {}) => ({
+    onClick: callFnsInSequence(handleClapClick, onClick),
+    'aria-pressed': clapState.isClicked,
+    ...otherProps
+  })
 
-  const counterProps = {
+  const getCounterProps = ({ ...otherProps }) => ({
     count,
     'aria-valuemax': MAX_CLAP,
     'aria-valuemin': 0,
-    'aria-valuenow': count
-  }
+    'aria-valuenow': count,
+    ...otherProps
+  })
 
   return {
     clapState,
-    togglerProps,
-    counterProps
+    getTogglerProps,
+    getCounterProps
   }
 }
 
@@ -198,50 +203,6 @@ const useDOMRef = () => {
   }, [])
 
   return [DOMRef, setRef]
-}
-
-/** ====================================
- *      🔰 MediumClap
-==================================== **/
-
-const MediumClap = () => {
-  const { clapState, togglerProps, counterProps } = useClapState()
-  const { count, countTotal, isClicked } = clapState
-
-  const [
-    { clapContainerRef, clapCountRef, countTotalRef },
-    setRef
-  ] = useDOMRef()
-
-  const animationTimeline = useClapAnimation({
-    duration: 300,
-    bounceEl: clapCountRef,
-    fadeEl: countTotalRef,
-    burstEl: clapContainerRef
-  })
-
-  useEffectAfterMount(
-    () => {
-      animationTimeline.replay()
-    },
-    [count]
-  )
-
-  return (
-    <ClapContainer
-      ref={setRef}
-      data-refkey='clapContainerRef'
-      {...togglerProps}
-    >
-      <ClapIcon isClicked={isClicked} />
-      <ClapCount ref={setRef} data-refkey='clapCountRef' {...counterProps} />
-      <CountTotal
-        ref={setRef}
-        data-refkey='countTotalRef'
-        countTotal={countTotal}
-      />
-    </ClapContainer>
-  )
 }
 
 /** ====================================
@@ -325,7 +286,60 @@ const CountTotal = forwardRef(
 ==================================== **/
 
 const Usage = () => {
-  return <MediumClap />
+  const { clapState, getTogglerProps, getCounterProps } = useClapState()
+  const { count, countTotal, isClicked } = clapState
+
+  const [
+    { clapContainerRef, clapCountRef, countTotalRef },
+    setRef
+  ] = useDOMRef()
+
+  const animationTimeline = useClapAnimation({
+    duration: 300,
+    bounceEl: clapCountRef,
+    fadeEl: countTotalRef,
+    burstEl: clapContainerRef
+  })
+
+  const onClick = () => {
+    animationTimeline.replay()
+  }
+
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <ClapContainer
+        ref={setRef}
+        data-refkey='clapContainerRef'
+        {...getTogglerProps({
+          'data-testId': '#grabThis',
+          onClick
+        })}
+      >
+        <ClapIcon isClicked={isClicked} />
+        <ClapCount
+          ref={setRef}
+          data-refkey='clapCountRef'
+          {...getCounterProps()}
+        />
+        <CountTotal
+          ref={setRef}
+          data-refkey='countTotalRef'
+          countTotal={countTotal}
+        />
+      </ClapContainer>
+      <section
+        style={{
+          borderBottom: '1px solid #bdc3c7',
+          color: '#27ae60',
+          marginTop: '30px',
+          padding: '10px 20px',
+          borderRadius: '20px'
+        }}
+      >
+        {!isClicked ? 'No recommendations :(' : `Recommended ${count} times 🔥`}
+      </section>
+    </div>
+  )
 }
 
 export default Usage
