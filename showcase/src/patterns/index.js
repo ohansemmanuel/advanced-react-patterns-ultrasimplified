@@ -150,6 +150,15 @@ const useClapState = ({ initialState = INIT_STATE } = {}) => {
     [count, countTotal]
   )
 
+  const resetRef = useRef(0)
+  const reset = useCallback(
+    () => {
+      setClapState(initialState)
+      ++resetRef.current
+    },
+    [setClapState]
+  )
+
   const getTogglerProps = ({ onClick, ...otherProps } = {}) => ({
     onClick: callFnsInSequence(handleClapClick, onClick),
     'aria-pressed': clapState.isClicked,
@@ -167,7 +176,9 @@ const useClapState = ({ initialState = INIT_STATE } = {}) => {
   return {
     clapState,
     getTogglerProps,
-    getCounterProps
+    getCounterProps,
+    reset,
+    resetDep: resetRef.current
   }
 }
 
@@ -285,8 +296,15 @@ const CountTotal = forwardRef(
     may consume the component API
 ==================================== **/
 
+const initialState = { count: 10, countTotal: 22, isClicked: false }
 const Usage = () => {
-  const { clapState, getTogglerProps, getCounterProps } = useClapState()
+  const {
+    clapState,
+    getTogglerProps,
+    getCounterProps,
+    reset,
+    resetDep
+  } = useClapState({ initialState })
   const { count, countTotal, isClicked } = clapState
 
   const [
@@ -304,6 +322,22 @@ const Usage = () => {
   const onClick = () => {
     animationTimeline.replay()
   }
+
+  // Side effect after reset has occured.
+  const [uploadingReset, setUpload] = useState(false)
+  useEffectAfterMount(
+    () => {
+      setUpload(true)
+
+      const id = setTimeout(() => {
+        setUpload(false)
+        console.log('RESET COMPLETE!!!')
+      }, 3000)
+
+      return () => clearTimeout(id)
+    },
+    [resetDep]
+  )
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -327,16 +361,18 @@ const Usage = () => {
           countTotal={countTotal}
         />
       </ClapContainer>
-      <section
-        style={{
-          borderBottom: '1px solid #bdc3c7',
-          color: '#27ae60',
-          marginTop: '30px',
-          padding: '10px 20px',
-          borderRadius: '20px'
-        }}
-      >
-        {!isClicked ? 'No recommendations :(' : `Recommended ${count} times 🔥`}
+      <section>
+        <button
+          className={userStyles.resetBtn}
+          disabled={uploadingReset}
+          onClick={reset}
+        >
+          reset
+        </button>
+        <pre className={userStyles.resetMsg}>{JSON.stringify({ count, countTotal, isClicked })}</pre>
+        <pre className={userStyles.resetMsg} style={{ height: '35px' }}>
+          {uploadingReset ? `uploading reset ${resetDep}...` : ''}
+        </pre>
       </section>
     </div>
   )
