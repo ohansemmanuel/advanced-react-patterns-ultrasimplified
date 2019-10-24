@@ -13,9 +13,9 @@ import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
 /** ====================================
-   *          🔰Hook
-        Hook for Animation
-  ==================================== **/
+ *          🔰Hook
+      Hook for Animation
+==================================== **/
 
 const useClapAnimation = ({ duration: tlDuration }) => {
   const [animationTimeline, setAnimationTimeline] = useState(
@@ -107,8 +107,8 @@ const useClapAnimation = ({ duration: tlDuration }) => {
   return animationTimeline
 }
 /** ====================================
-   *      🔰 MediumClap
-  ==================================== **/
+ *      🔰 MediumClap
+==================================== **/
 const initialState = {
   count: 0,
   countTotal: generateRandomNumber(500, 10000),
@@ -166,9 +166,9 @@ const MediumClap = ({ children, onClap }) => {
 }
 
 /** ====================================
-   *      🔰SubComponents
-  Smaller Component used by <MediumClap />
-  ==================================== **/
+ *      🔰SubComponents
+Smaller Component used by <MediumClap />
+==================================== **/
 
 const ClapIcon = () => {
   const { isClicked } = useContext(MediumClapContext)
@@ -218,10 +218,10 @@ MediumClap.Total = CountTotal
 MediumClap.Info = ClapInfo
 
 /** ====================================
-      *        🔰USAGE
-      Below's how a potential user
-      may consume the component API
-  ==================================== **/
+    *        🔰USAGE
+    Below's how a potential user
+    may consume the component API
+==================================== **/
 
 const Usage = () => {
   const [total, setTotal] = useState(0)

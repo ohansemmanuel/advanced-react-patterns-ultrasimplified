@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useContext,
+  useMemo,
+  createContext
+} from 'react'
+
 import mojs from 'mo-js'
+import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
@@ -8,15 +17,24 @@ import styles from './index.css'
       Hook for Animation
 ==================================== **/
 
-const useClapAnimation = ({ duration: tlDuration }) => {
+const useClapAnimation = ({
+  duration: tlDuration,
+  bounceEl,
+  fadeEl,
+  burstEl
+}) => {
   const [animationTimeline, setAnimationTimeline] = useState(
     new mojs.Timeline()
   )
 
-  useEffect(
+  useLayoutEffect(
     () => {
+      if (!bounceEl || !fadeEl || !burstEl) {
+        return
+      }
+
       const triangleBurst = new mojs.Burst({
-        parent: '#clap',
+        parent: burstEl,
         radius: { 50: 95 },
         count: 5,
         angle: 30,
@@ -35,7 +53,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const circleBurst = new mojs.Burst({
-        parent: '#clap',
+        parent: burstEl,
         radius: { 50: 75 },
         angle: 25,
         duration: tlDuration,
@@ -50,7 +68,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const countAnimation = new mojs.Html({
-        el: '#clapCount',
+        el: bounceEl,
         isShowStart: false,
         isShowEnd: true,
         y: { 0: -30 },
@@ -63,7 +81,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const countTotalAnimation = new mojs.Html({
-        el: '#clapCountTotal',
+        el: fadeEl,
         isShowStart: false,
         isShowEnd: true,
         opacity: { 0: 1 },
@@ -73,14 +91,19 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const scaleButton = new mojs.Html({
-        el: '#clap',
+        el: burstEl,
         duration: tlDuration,
         scale: { 1.3: 1 },
         easing: mojs.easing.out
       })
 
-      const clap = document.getElementById('clap')
-      clap.style.transform = 'scale(1, 1)'
+      if (typeof burstEl === 'string') {
+        clap.style.transform = 'scale(1, 1)'
+        const el = document.getElementById(id)
+        el.style.transform = 'scale(1, 1)'
+      } else {
+        burstEl.style.transform = 'scale(1, 1)'
+      }
 
       const updatedAnimationTimeline = animationTimeline.add([
         countAnimation,
@@ -92,7 +115,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
 
       setAnimationTimeline(updatedAnimationTimeline)
     },
-    [tlDuration, animationTimeline]
+    [tlDuration, animationTimeline, bounceEl, fadeEl, burstEl]
   )
 
   return animationTimeline
@@ -106,14 +129,33 @@ const initialState = {
   isClicked: false
 }
 
-const MediumClap = () => {
+const MediumClapContext = createContext()
+const { Provider } = MediumClapContext
+
+const MediumClap = ({ children }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
 
-  const animationTimeline = useClapAnimation({ duration: 300 })
+  const [{ clapRef, clapCountRef, clapTotalRef }, setRefState] = useState({})
+
+  const setRef = useCallback(node => {
+    if (node !== null) {
+      setRefState(prevRefState => ({
+        ...prevRefState,
+        [node.dataset.refkey]: node
+      }))
+    }
+  }, [])
+
+  const animationTimeline = useClapAnimation({
+    duration: 300,
+    bounceEl: clapCountRef,
+    fadeEl: clapTotalRef,
+    burstEl: clapRef
+  })
+
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
 
     setClapState({
@@ -123,12 +165,27 @@ const MediumClap = () => {
     })
   }
 
+  const memoizedValue = useMemo(
+    () => ({
+      count,
+      countTotal,
+      isClicked,
+      setRef
+    }),
+    [count, countTotal, isClicked, setRef]
+  )
+
   return (
-    <button id='clap' className={styles.clap} onClick={handleClapClick}>
-      <ClapIcon isClicked={isClicked} />
-      <ClapCount count={count} />
-      <CountTotal countTotal={countTotal} />
-    </button>
+    <Provider value={memoizedValue}>
+      <button
+        ref={setRef}
+        data-refkey='clapRef'
+        className={styles.clap}
+        onClick={handleClapClick}
+      >
+        {children}
+      </button>
+    </Provider>
   )
 }
 
@@ -137,7 +194,8 @@ const MediumClap = () => {
 Smaller Component used by <MediumClap />
 ==================================== **/
 
-const ClapIcon = ({ isClicked }) => {
+const ClapIcon = () => {
+  const { isClicked } = useContext(MediumClapContext)
   return (
     <span>
       <svg
@@ -152,20 +210,36 @@ const ClapIcon = ({ isClicked }) => {
     </span>
   )
 }
-const ClapCount = ({ count }) => {
+const ClapCount = () => {
+  const { count, setRef } = useContext(MediumClapContext)
   return (
-    <span id='clapCount' className={styles.count}>
+    <span ref={setRef} data-refkey='clapCountRef' className={styles.count}>
       +{count}
     </span>
   )
 }
-const CountTotal = ({ countTotal }) => {
+const CountTotal = () => {
+  const { countTotal, setRef } = useContext(MediumClapContext)
   return (
-    <span id='clapCountTotal' className={styles.total}>
+    <span ref={setRef} data-refkey='clapTotalRef' className={styles.total}>
       {countTotal}
     </span>
   )
 }
+
+const ClapInfo = () => {
+  const { countTotal } = useContext(MediumClapContext)
+  return (
+    <div className={styles.info}>
+      {wordConverter.toWords(countTotal)} claps!
+    </div>
+  )
+}
+
+MediumClap.Icon = ClapIcon
+MediumClap.Count = ClapCount
+MediumClap.Total = CountTotal
+MediumClap.Info = ClapInfo
 
 /** ====================================
     *        🔰USAGE
@@ -174,7 +248,14 @@ const CountTotal = ({ countTotal }) => {
 ==================================== **/
 
 const Usage = () => {
-  return <MediumClap />
+  return (
+    <MediumClap>
+      <MediumClap.Icon />
+      <MediumClap.Total />
+      <MediumClap.Count />
+      <MediumClap.Info />
+    </MediumClap>
+  )
 }
 
 export default Usage

@@ -1,6 +1,8 @@
 import React, {
   useState,
   useEffect,
+  useCallback,
+  useLayoutEffect,
   useContext,
   useMemo,
   useRef,
@@ -14,19 +16,28 @@ import styles from './index.css'
 import userStyles from './usage.css'
 
 /** ====================================
-   *          🔰Hook
-        Hook for Animation
-  ==================================== **/
+ *          🔰Hook
+      Hook for Animation
+==================================== **/
 
-const useClapAnimation = ({ duration: tlDuration }) => {
+const useClapAnimation = ({
+  duration: tlDuration,
+  bounceEl,
+  fadeEl,
+  burstEl
+}) => {
   const [animationTimeline, setAnimationTimeline] = useState(
     new mojs.Timeline()
   )
 
-  useEffect(
+  useLayoutEffect(
     () => {
+      if (!bounceEl || !fadeEl || !burstEl) {
+        return
+      }
+
       const triangleBurst = new mojs.Burst({
-        parent: '#clap',
+        parent: burstEl,
         radius: { 50: 95 },
         count: 5,
         angle: 30,
@@ -45,7 +56,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const circleBurst = new mojs.Burst({
-        parent: '#clap',
+        parent: burstEl,
         radius: { 50: 75 },
         angle: 25,
         duration: tlDuration,
@@ -60,7 +71,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const countAnimation = new mojs.Html({
-        el: '#clapCount',
+        el: bounceEl,
         isShowStart: false,
         isShowEnd: true,
         y: { 0: -30 },
@@ -73,7 +84,7 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const countTotalAnimation = new mojs.Html({
-        el: '#clapCountTotal',
+        el: fadeEl,
         isShowStart: false,
         isShowEnd: true,
         opacity: { 0: 1 },
@@ -83,14 +94,19 @@ const useClapAnimation = ({ duration: tlDuration }) => {
       })
 
       const scaleButton = new mojs.Html({
-        el: '#clap',
+        el: burstEl,
         duration: tlDuration,
         scale: { 1.3: 1 },
         easing: mojs.easing.out
       })
 
-      const clap = document.getElementById('clap')
-      clap.style.transform = 'scale(1, 1)'
+      if (typeof burstEl === 'string') {
+        clap.style.transform = 'scale(1, 1)'
+        const el = document.getElementById(id)
+        el.style.transform = 'scale(1, 1)'
+      } else {
+        burstEl.style.transform = 'scale(1, 1)'
+      }
 
       const updatedAnimationTimeline = animationTimeline.add([
         countAnimation,
@@ -102,14 +118,14 @@ const useClapAnimation = ({ duration: tlDuration }) => {
 
       setAnimationTimeline(updatedAnimationTimeline)
     },
-    [tlDuration, animationTimeline]
+    [tlDuration, animationTimeline, bounceEl, fadeEl, burstEl]
   )
 
   return animationTimeline
 }
 /** ====================================
-   *      🔰 MediumClap
-  ==================================== **/
+ *      🔰 MediumClap
+==================================== **/
 const initialState = {
   count: 0,
   countTotal: generateRandomNumber(500, 10000),
@@ -129,9 +145,24 @@ const MediumClap = ({
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
 
-  const animationTimeline = useClapAnimation({ duration: 300 })
+  const [{ clapRef, clapCountRef, clapTotalRef }, setRefState] = useState({})
+  const setRef = useCallback(node => {
+    if (node !== null) {
+      setRefState(prevRefState => ({
+        ...prevRefState,
+        [node.dataset.refkey]: node
+      }))
+    }
+  }, [])
+
+  const animationTimeline = useClapAnimation({
+    duration: 300,
+    bounceEl: clapCountRef,
+    fadeEl: clapTotalRef,
+    burstEl: clapRef
+  })
+
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
 
     setClapState({
@@ -157,9 +188,10 @@ const MediumClap = ({
     () => ({
       count,
       countTotal,
-      isClicked
+      isClicked,
+      setRef
     }),
-    [count, countTotal, isClicked]
+    [count, countTotal, isClicked, setRef]
   )
 
   const classNames = [styles.clap, className].join(' ').trim()
@@ -167,7 +199,8 @@ const MediumClap = ({
   return (
     <Provider value={memoizedValue}>
       <button
-        id='clap'
+        ref={setRef}
+        data-refkey='clapRef'
         className={styles.clap}
         onClick={handleClapClick}
         className={classNames}
@@ -180,9 +213,9 @@ const MediumClap = ({
 }
 
 /** ====================================
-   *      🔰SubComponents
-  Smaller Component used by <MediumClap />
-  ==================================== **/
+ *      🔰SubComponents
+Smaller Component used by <MediumClap />
+==================================== **/
 
 const ClapIcon = ({ className = '', style: userStyles = {} }) => {
   const { isClicked } = useContext(MediumClapContext)
@@ -206,21 +239,31 @@ const ClapIcon = ({ className = '', style: userStyles = {} }) => {
   )
 }
 const ClapCount = ({ className = '', style: userStyles = {} }) => {
-  const { count } = useContext(MediumClapContext)
+  const { count, setRef } = useContext(MediumClapContext)
   const classNames = [styles.count, className].join(' ').trim()
 
   return (
-    <span id='clapCount' className={classNames} style={userStyles}>
+    <span
+      ref={setRef}
+      data-refkey='clapCountRef'
+      className={classNames}
+      style={userStyles}
+    >
       +{count}
     </span>
   )
 }
 const CountTotal = ({ className = '', style: userStyles = {} }) => {
-  const { countTotal } = useContext(MediumClapContext)
+  const { countTotal, setRef } = useContext(MediumClapContext)
   const classNames = [styles.total, className].join(' ').trim()
 
   return (
-    <span id='clapCountTotal' className={classNames} style={userStyles}>
+    <span
+      ref={setRef}
+      data-refkey='clapTotalRef'
+      className={classNames}
+      style={userStyles}
+    >
       {countTotal}
     </span>
   )
@@ -241,10 +284,10 @@ MediumClap.Total = CountTotal
 MediumClap.Info = ClapInfo
 
 /** ====================================
-      *        🔰USAGE
-      Below's how a potential user
-      may consume the component API
-  ==================================== **/
+    *        🔰USAGE
+    Below's how a potential user
+    may consume the component API
+==================================== **/
 
 const Usage = () => {
   const [total, setTotal] = useState(0)
