@@ -124,8 +124,8 @@ const useClapAnimation = ({
   return animationTimeline
 }
 /** ====================================
- *      🔰 MediumClap
-==================================== **/
+   *      🔰 MediumClap
+  ==================================== **/
 const initialState = {
   count: 0,
   countTotal: generateRandomNumber(500, 10000),
@@ -168,7 +168,6 @@ const MediumClap = ({
   const isControlled = !!values
 
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
     isControlled
       ? onClap()
@@ -226,16 +225,16 @@ const MediumClap = ({
 }
 
 /** ====================================
- *      🔰SubComponents
-Smaller Component used by <MediumClap />
-==================================== **/
+   *      🔰SubComponents
+  Smaller Component used by <MediumClap />
+  ==================================== **/
 
 const ClapIcon = ({ className = '', style: userStyles = {} }) => {
   const { isClicked } = useContext(MediumClapContext)
   const classNames = [styles.icon, isClicked ? styles.checked : '', className]
     .join(' ')
     .trim()
-
+  
   return (
     <span>
       <svg
@@ -297,10 +296,10 @@ MediumClap.Total = CountTotal
 MediumClap.Info = ClapInfo
 
 /** ====================================
-    *        🔰USAGE
-    Below's how a potential user
-    may consume the component API
-==================================== **/
+      *        🔰USAGE
+      Below's how a potential user
+      may consume the component API
+  ==================================== **/
 
 const MAXIMUM_USER_CLAP = 10
 const INITIAL_STATE = {
