@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
     "dev": "webpack-dev-server --watch --config webpack.config.dev.js",
+    "deploy": "surge ./dist adv-react-patterns-ultra.surge.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
