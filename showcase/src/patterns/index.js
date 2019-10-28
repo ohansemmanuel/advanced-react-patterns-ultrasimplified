@@ -242,11 +242,11 @@ const CountTotal = () => {
   )
 }
 
-const ClapInfo = () => {
+const ClapInfo = ({ info }) => {
   const { countTotal } = useContext(MediumClapContext)
   return (
     <div className={styles.info}>
-      {wordConverter.toWords(countTotal)} claps!
+      {info || wordConverter.toWords(countTotal)} claps!
     </div>
   )
 }
