@@ -263,19 +263,18 @@ MediumClap.Info = ClapInfo
   ==================================== **/
 
 const Usage = () => {
-  const [state, setState] = useState({})
-  const handleClap = clapState => {
-    setState(clapState)
-    // perform side effect ...
+  const [total, setTotal] = useState(0)
+
+  const onClap = ({ countTotal }) => {
+    setTotal(countTotal)
   }
+
   return (
-    <MediumClap onClap={handleClap}>
+    <MediumClap onClap={onClap}>
       <MediumClap.Icon />
       <MediumClap.Total />
       <MediumClap.Count />
-      <MediumClap.Info
-        info={`Your article has been clapped ${state.countTotal} times`}
-      />
+      <MediumClap.Info info={`Your article has been clapped ${total} times`} />
     </MediumClap>
   )
 }
