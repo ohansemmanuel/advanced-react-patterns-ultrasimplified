@@ -1,8 +1,10 @@
 import React, {
   useState,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useContext,
+  useRef,
   useMemo,
   createContext
 } from 'react'
@@ -132,7 +134,7 @@ const initialState = {
 const MediumClapContext = createContext()
 const { Provider } = MediumClapContext
 
-const MediumClap = ({ children }) => {
+const MediumClap = ({ children, onClap }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
@@ -156,6 +158,7 @@ const MediumClap = ({ children }) => {
   })
 
   const handleClapClick = () => {
+    // 👉 prop from HOC
     animationTimeline.replay()
 
     setClapState({
@@ -164,6 +167,18 @@ const MediumClap = ({ children }) => {
       isClicked: true
     })
   }
+
+  const componentJustMounted = useRef(true)
+
+  useEffect(
+    () => {
+      if (!componentJustMounted.current) {
+        onClap(clapState)
+      }
+      componentJustMounted.current = false
+    },
+    [count, onClap]
+  )
 
   const memoizedValue = useMemo(
     () => ({
@@ -248,12 +263,19 @@ MediumClap.Info = ClapInfo
   ==================================== **/
 
 const Usage = () => {
+  const [state, setState] = useState({})
+  const handleClap = clapState => {
+    setState(clapState)
+    // perform side effect ...
+  }
   return (
-    <MediumClap>
+    <MediumClap onClap={handleClap}>
       <MediumClap.Icon />
       <MediumClap.Total />
       <MediumClap.Count />
-      <MediumClap.Info />
+      <MediumClap.Info
+        info={`Your article has been clapped ${state.countTotal} times`}
+      />
     </MediumClap>
   )
 }
