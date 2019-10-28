@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 
 import mojs from 'mo-js'
+import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
@@ -182,9 +183,7 @@ const MediumClap = ({ children }) => {
         className={styles.clap}
         onClick={handleClapClick}
       >
-        <ClapIcon isClicked={isClicked} />
-        <ClapCount count={count} />
-        <CountTotal countTotal={countTotal} />
+        {children}
       </button>
     </Provider>
   )
@@ -228,6 +227,20 @@ const CountTotal = () => {
   )
 }
 
+const ClapInfo = () => {
+  const { countTotal } = useContext(MediumClapContext)
+  return (
+    <div className={styles.info}>
+      {wordConverter.toWords(countTotal)} claps!
+    </div>
+  )
+}
+
+MediumClap.Icon = ClapIcon
+MediumClap.Count = ClapCount
+MediumClap.Total = CountTotal
+MediumClap.Info = ClapInfo
+
 /** ====================================
       *        🔰USAGE
       Below's how a potential user
@@ -235,7 +248,14 @@ const CountTotal = () => {
   ==================================== **/
 
 const Usage = () => {
-  return <MediumClap />
+  return (
+    <MediumClap>
+      <MediumClap.Icon />
+      <MediumClap.Total />
+      <MediumClap.Count />
+      <MediumClap.Info />
+    </MediumClap>
+  )
 }
 
 export default Usage
