@@ -18,7 +18,7 @@ export const TheMediumClap = () => (
 
     <Columns>
       <Column>
-        <Box isPrimary>
+        <Box isPrimary note='Animated via an HOC'>
           <Usage />
         </Box>
         <CTAContainer alignRight>
@@ -26,7 +26,7 @@ export const TheMediumClap = () => (
         </CTAContainer>
       </Column>
       <Column leftGap>
-        <Box>
+        <Box note='Animated via a hook 💪'>
           <Usage2 />
         </Box>
         <CTAContainer>

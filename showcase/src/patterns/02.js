@@ -8,14 +8,13 @@ import React, {
 } from 'react'
 
 import mojs from 'mo-js'
-import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
 /** ====================================
- *          🔰Hook
-      Hook for Animation
-==================================== **/
+   *          🔰Hook
+        Hook for Animation
+  ==================================== **/
 
 const useClapAnimation = ({
   duration: tlDuration,
@@ -121,8 +120,8 @@ const useClapAnimation = ({
   return animationTimeline
 }
 /** ====================================
- *      🔰 MediumClap
-==================================== **/
+   *      🔰 MediumClap
+  ==================================== **/
 const initialState = {
   count: 0,
   countTotal: generateRandomNumber(500, 10000),
@@ -183,16 +182,18 @@ const MediumClap = ({ children }) => {
         className={styles.clap}
         onClick={handleClapClick}
       >
-        {children}
+        <ClapIcon isClicked={isClicked} />
+        <ClapCount count={count} />
+        <CountTotal countTotal={countTotal} />
       </button>
     </Provider>
   )
 }
 
 /** ====================================
- *      🔰SubComponents
-Smaller Component used by <MediumClap />
-==================================== **/
+   *      🔰SubComponents
+  Smaller Component used by <MediumClap />
+  ==================================== **/
 
 const ClapIcon = () => {
   const { isClicked } = useContext(MediumClapContext)
@@ -227,35 +228,14 @@ const CountTotal = () => {
   )
 }
 
-const ClapInfo = () => {
-  const { countTotal } = useContext(MediumClapContext)
-  return (
-    <div className={styles.info}>
-      {wordConverter.toWords(countTotal)} claps!
-    </div>
-  )
-}
-
-MediumClap.Icon = ClapIcon
-MediumClap.Count = ClapCount
-MediumClap.Total = CountTotal
-MediumClap.Info = ClapInfo
-
 /** ====================================
-    *        🔰USAGE
-    Below's how a potential user
-    may consume the component API
-==================================== **/
+      *        🔰USAGE
+      Below's how a potential user
+      may consume the component API
+  ==================================== **/
 
 const Usage = () => {
-  return (
-    <MediumClap>
-      <MediumClap.Icon />
-      <MediumClap.Total />
-      <MediumClap.Count />
-      <MediumClap.Info />
-    </MediumClap>
-  )
+  return <MediumClap />
 }
 
 export default Usage
