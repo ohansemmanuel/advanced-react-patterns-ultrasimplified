@@ -12,12 +12,14 @@ Here I'll walk you through modern advanced react patterns in an intuitive fashio
 
 ### What do you mean by 'Ultrasimplified'?
 1. Real World Demos 
+
 You won't find basic hello world demos here. The demos have been intentionally designed to be actually helpful and **relatable**. 
 
 ![GIF of Medium clap demo](assets/explainer-demo.gif)
 
-2. Mimics your day-to-day job 
-Each pattern is implemented via a pull request. View these PRs. Read the descriptions. Read the comments. Like you do at work! 
+2. Mimics your day-to-day job  
+
+Each pattern is implemented and discussed via **a pull request**. View the PRs. Read the descriptions. Read the comments. Like you do at work! 
 
 
 ### But I'm just a beginner. Isn't this too advanced?   
@@ -63,14 +65,7 @@ or
 yarn dev 
 ```
 
-
-### Hey, I've got questions
-Use github [issues](https://guides.github.com/features/issues/) 
-
-
-
-
-
+### Show me the PRs
 
 ---
 
