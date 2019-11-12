@@ -14,3 +14,8 @@ export const LIGHT_PURPLE = '#5b53ff'
 export const OX = '#e65661'
 export const PALE_BLUE = '#4db0ed'
 export const PALE_RED = '#e3968c'
+
+// z-index
+export const zIndex = {
+  SIDEBAR: 10
+}

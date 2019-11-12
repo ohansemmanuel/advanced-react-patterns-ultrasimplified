@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <StyledContainer>
-      {isSidebarShown && <Sidebar />}
+      {isSidebarShown && <Sidebar setShowSidebar={setShowSidebar} />}
       <Body
         setShowSidebar={setShowSidebar}
         isMediumOrLarger={isMediumOrLarger}
