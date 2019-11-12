@@ -1,20 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import { LIGHT_PURPLE, DARK_GREY } from './utils/constants'
+import { media } from './content/StyledContent'
 
 export const StyledButton = styled.button`
   background: ${({ primary }) => (primary ? LIGHT_PURPLE : DARK_GREY)};
-  border: 0;
-  outline: 0;
-  color: #fff;
-  text-align: center;
-  width: 24vw;
-  font-size: 1rem;
-  font-family: 'Avenir';
-  font-weight: 300;
-  padding: 18px 0;
-  border-radius: 30px;
-  cursor: pointer;
+  width: 100%;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  padding: 9px 0;
 
   &:active {
     border: 1px solid #fff;
@@ -28,6 +22,13 @@ export const StyledButton = styled.button`
     position: relative;
     top: 3px;
   }
+
+  ${media.md`
+    width: 24vw;
+    font-size: 1rem;
+    border-radius: 30px;
+    padding: 18px 0;
+  `}
 `
 
 const Button = ({ Icon, text, primary }) => (

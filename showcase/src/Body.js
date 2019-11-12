@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Router } from '@reach/router'
 import { HEADER_ALLOWANCE } from './utils/constants'
@@ -14,13 +14,20 @@ import {
   StateReducers,
   ReusableStyles
 } from './content'
+import { media, StyledFloatingBtn } from './content/StyledContent'
 
 const StyledAppBody = styled.div`
-  padding-top: ${() => `${HEADER_ALLOWANCE}vh`};
   background: #191921;
+  padding: ${() => `${HEADER_ALLOWANCE / 6}vh 10px`};
+
+  ${media.md`
+    padding: ${() => `${HEADER_ALLOWANCE}vh 0`};
+  `}
 `
 
-const Body = () => {
+const Body = ({ setShowSidebar, isMediumOrLarger }) => {
+  const toggleSidebar = () => setShowSidebar(val => !val)
+
   return (
     <StyledAppBody>
       <Router>
@@ -35,6 +42,9 @@ const Body = () => {
         <StateInitializers path='/state-initializers' />
         <StateReducers path='/state-reducers' />
       </Router>
+      {!isMediumOrLarger && (
+        <StyledFloatingBtn onClick={toggleSidebar}>+</StyledFloatingBtn>
+      )}
     </StyledAppBody>
   )
 }

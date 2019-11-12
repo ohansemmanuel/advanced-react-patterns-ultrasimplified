@@ -16,9 +16,20 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     color: #b2bbc8;
     font-family: 'Avenir';
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
   }
+
+  button {
+    font-family: 'Avenir';
+    font-weight: 300;
+    cursor: pointer;
+    text-align: center;
+    border: 0;
+    outline: 0;
+    color: #fff;
+  }
+
 `
 
 ReactDOM.render(

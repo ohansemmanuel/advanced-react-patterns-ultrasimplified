@@ -10,6 +10,7 @@ import {
 } from './utils/constants'
 
 import Logo from './assets/logo_white.svg'
+import { media } from './content/StyledContent'
 
 const StyledSidebar = styled.div`
   background: #0f0f14;
@@ -29,7 +30,7 @@ const StyledLogoArea = styled.div`
 const StyledNavigation = styled.nav`
   padding: 0;
   margin: 0;
-  margin-top: ${() => `${HEADER_ALLOWANCE}vh`};
+  margin-top: ${() => `${HEADER_ALLOWANCE / 6}vh`};
 
   > a {
     display: block;
@@ -43,16 +44,21 @@ const StyledNavigation = styled.nav`
     color: ${() => `${LIGHTER_GREY}`};
   }
 
-  > a:hover {
-    outline: ${() => `1px solid ${GREY}`};
-  }
+  ${media.md`
+    margin-top: ${() => `${HEADER_ALLOWANCE}vh`};
+    > a:hover {
+      outline: ${() => `1px solid ${GREY}`};
+    }
+  `}
 `
 
-const LogoArea = () => (
-  <StyledLogoArea>
-    <Logo style={{ width: '43%' }} />
-  </StyledLogoArea>
-)
+const LogoArea = () => {
+  return (
+    <StyledLogoArea>
+      <Logo style={{ width: '43%' }} />
+    </StyledLogoArea>
+  )
+}
 
 const NAV_ITEMS = [
   'Home',

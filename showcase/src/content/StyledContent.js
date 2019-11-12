@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import ArrowRed from '../assets/arrow_red.svg'
 import ArrowBlue from '../assets/arrow_blue.svg'
 
@@ -9,11 +9,49 @@ import {
   ASH,
   LIGHT_ASH,
   PALE_BLUE,
-  OX
+  OX,
+  PALE_RED
 } from '../utils/constants'
 
+export const SCREEN_SIZES = {
+  sm: 576,
+  md: 720,
+  lg: 960,
+  xl: 1140
+}
+
+export const StyledFloatingBtn = styled.button`
+  background: ${() => PALE_RED};
+  width: 71px;
+  height: 71px;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  font-size: 2.5rem;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+`
+
+// "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"
+
+export const media = Object.keys(SCREEN_SIZES).reduce((accumulator, label) => {
+  // use em in breakpoints to work properly cross-browser and support users
+  // changing their browsers font-size: https://zellwk.com/blog/media-query-units/
+  const emSize = SCREEN_SIZES[label] / 16
+  accumulator[label] = (...args) => css`
+    @media (min-width: ${emSize}em) {
+      ${css(...args)};
+    }
+  `
+  return accumulator
+}, {})
+
 export const StyledContentContainer = styled.div`
-  padding: ${() => `${HEADER_ALLOWANCE}vh ${SIDEBAR_LEFT_PADDING}vw 0`};
+  padding: ${() => `${HEADER_ALLOWANCE}vh ${SIDEBAR_LEFT_PADDING}vw`};
+
+  ${media.md`
+    padding: ${() => `${HEADER_ALLOWANCE}vh ${SIDEBAR_LEFT_PADDING}vw 0`};
+  `}
 `
 
 export const H1 = styled.h1`
@@ -26,12 +64,20 @@ export const H1 = styled.h1`
 
 export const Columns = styled.div`
   display: flex;
+  flex-direction: column;
+
+  ${media.md`
+    display: flex;
+    flex-direction: row;
+  `}
 `
 
 export const Column = styled.div`
-  width: 31.88vw;
-  margin-left: ${({ leftGap }) =>
+  ${media.md` 
+    width: 31.88vw;
+    margin-left: ${({ leftGap }) =>
     leftGap ? `${SIDEBAR_LEFT_PADDING}vw` : 'initial'};
+  `}
 `
 
 export const DisplayBox = styled.div`
@@ -39,6 +85,7 @@ export const DisplayBox = styled.div`
   width: 100%;
   min-height: 47vh;
   padding: ${() => `${SIDEBAR_LEFT_PADDING}vw`};
+  margin: ${({ m }) => m};
   border-radius: 16px;
   background-color: ${() => `${LIGHT_ASH}`};
 
@@ -49,9 +96,25 @@ export const DisplayBox = styled.div`
   }
   > aside {
     text-align: center;
-    position: relative;
-    bottom: -10px;
   }
+`
+
+const TaglineContainer = styled.div`
+  text-align: right;
+
+  > svg {
+    position: relative;
+    top: -6px;
+    left: 5px;
+  }
+
+  ${media.md`
+    text-align: left;
+    > svg {
+      left: 0; 
+      top: -13px;
+    }
+  `};
 `
 
 const TagLine = styled.p`
@@ -59,8 +122,12 @@ const TagLine = styled.p`
   margin: 0;
   font-family: 'Kalam';
   font-weight: 300;
-  transform: rotateZ(-4.75deg) translateY(-15px);
+  transform: rotateZ(-2.75deg) translateY(6px) translateX(-15px);
   color: ${({ isPrimary }) => (isPrimary ? OX : PALE_BLUE)};
+
+  ${media.md`
+    transform: rotateZ(-4.75deg) translateY(-15px);
+  `}
 `
 
 const Center = styled.div`
@@ -71,15 +138,19 @@ const Center = styled.div`
   min-height: 25vh;
 `
 
-export const Box = ({ isPrimary, children, note }) => {
+export const Box = ({ isPrimary, children, note, m }) => {
   return (
-    <DisplayBox>
-      <TagLine isPrimary={isPrimary}>{isPrimary ? 'Before' : 'After'}</TagLine>
-      {isPrimary ? (
-        <ArrowRed style={{ width: '80px' }} />
-      ) : (
-        <ArrowBlue style={{ width: '80px' }} />
-      )}
+    <DisplayBox m={m}>
+      <TaglineContainer>
+        <TagLine isPrimary={isPrimary}>
+          {isPrimary ? 'Before' : 'After'}
+        </TagLine>
+        {isPrimary ? (
+          <ArrowRed style={{ width: '80px' }} />
+        ) : (
+          <ArrowBlue style={{ width: '80px' }} />
+        )}
+      </TaglineContainer>
       <Center>{children}</Center>
       {note && <aside>{note}</aside>}
     </DisplayBox>
@@ -88,7 +159,7 @@ export const Box = ({ isPrimary, children, note }) => {
 
 export const CTAContainer = styled.div`
   display: flex;
-  margin-top: ${() => `${HEADER_ALLOWANCE / 1.5}vh`};
+  margin-top: ${({ mtop }) => mtop || `${HEADER_ALLOWANCE / 1.5}vh`};
 
   > button {
     margin-left: ${({ alignRight }) => (alignRight ? 'auto' : 'initial')};

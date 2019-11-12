@@ -38,6 +38,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-hot-loader": "^4.12.15",
+    "react-responsive": "^8.0.1",
     "styled-components": "^4.4.0"
   }
 }
