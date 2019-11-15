@@ -40,8 +40,8 @@ const patterns = [
 ]
 
 const notes = {
-  '01': 'Animated via an HOC',
-  '02': 'Animated via a hook 💪'
+  '1': 'Animated via an HOC',
+  '2': 'Animated via a hook 💪'
 }
 
 const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
@@ -72,7 +72,7 @@ const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
           )}
         </Column>
         <Column leftGap>
-          <Box note={notes[index]} m={!isMediumOrLarger && '15px 0 0 0'}>
+          <Box note={notes[index + 1]} m={!isMediumOrLarger && '15px 0 0 0'}>
             <Demo2 />
           </Box>
           {!isMediumOrLarger && (
