@@ -6,6 +6,7 @@ import ArrowBlue from '../assets/arrow_blue.svg'
 import {
   HEADER_ALLOWANCE,
   SIDEBAR_LEFT_PADDING,
+  COLUMN_WIDTH,
   ASH,
   LIGHT_ASH,
   PALE_BLUE,
@@ -81,7 +82,7 @@ export const Columns = styled.div`
 
 export const Column = styled.div`
   ${media.md` 
-    width: 31.88vw;
+    width: ${() => `${COLUMN_WIDTH}vw`}
     margin-left: ${({ leftGap }) =>
     leftGap ? `${SIDEBAR_LEFT_PADDING}vw` : 'initial'};
   `}
@@ -90,11 +91,14 @@ export const Column = styled.div`
 export const DisplayBox = styled.div`
   position: relative;
   width: 100%;
-  min-height: 47vh;
+  min-height: 360px;
+  max-height: 360px;
+  overflow-y: scroll;
   padding: ${() => `${SIDEBAR_LEFT_PADDING}vw`};
   margin: ${({ m }) => m};
   border-radius: 16px;
   background-color: ${() => `${LIGHT_ASH}`};
+  text-align: center;
 
   > svg {
     position: relative;
@@ -103,6 +107,15 @@ export const DisplayBox = styled.div`
   }
   > aside {
     text-align: center;
+  }
+
+  button {
+    max-width: 70%;
+    display: inline-block;
+  }
+
+  pre {
+    max-width: ${() => `${COLUMN_WIDTH - 2}vw`};
   }
 `
 
