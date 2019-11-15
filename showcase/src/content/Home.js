@@ -17,6 +17,13 @@ const CTAContainer = styled.div`
   }
 `
 
+const goToGithub = () => {
+  const newWindow = window.open(
+    'https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified'
+  )
+  newWindow.opener = null
+}
+
 export const Home = () => (
   <StyledContainer>
     <Hero style={{ width: '90%' }} />
@@ -25,6 +32,7 @@ export const Home = () => (
       <Button
         text='Star on Github'
         Icon={<GithubLogo style={{ width: '18px' }} />}
+        onClick={goToGithub}
       />
     </CTAContainer>
   </StyledContainer>

@@ -44,6 +44,12 @@ const notes = {
   '2': 'Animated via a hook 💪'
 }
 
+const PR_IDs = [1, 16, 17, 19, 6, 7, 8, 9, 10, 12]
+const PRs = PR_IDs.map(
+  id =>
+    `https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/${id}`
+)
+
 const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
   const firstLetterCap = str => str.slice(0, 1).toUpperCase() + str.slice(1)
   const title = pattern
@@ -55,6 +61,11 @@ const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
   const indexes = [index, index + 1].map(transformIndex)
   const Demo1 = require(`./patterns/${indexes[0]}`).default
   const Demo2 = require(`./patterns/${indexes[1]}`).default
+
+  const goToCodeImplementatiomn = () => {
+    const newWindow = window.open(PRs[index], 'blank')
+    newWindow.opener = null
+  }
 
   return (
     <StyledContentContainer>
@@ -84,6 +95,7 @@ const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
             <Button
               text='Code Implementation'
               Icon={<GithubLogo style={{ width: '18px' }} />}
+              onClick={goToCodeImplementatiomn}
             />
           </CTAContainer>
         </Column>

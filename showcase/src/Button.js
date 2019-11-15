@@ -38,8 +38,8 @@ export const StyledButton = styled.button`
   `}
 `
 
-const Button = ({ Icon, text, primary }) => (
-  <StyledButton primary={primary}>
+const Button = ({ Icon, text, primary, onClick }) => (
+  <StyledButton primary={primary} onClick={onClick}>
     {Icon || null}
     <span>{text}</span>
   </StyledButton>
