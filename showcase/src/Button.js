@@ -9,6 +9,13 @@ export const StyledButton = styled.button`
   font-size: 0.85rem;
   border-radius: 10px;
   padding: 9px 0;
+  font-family: 'Avenir';
+  font-weight: 300;
+  cursor: pointer;
+  text-align: center;
+  border: 0;
+  outline: 0;
+  color: #fff;
 
   &:active {
     border: 1px solid #fff;
@@ -27,7 +34,7 @@ export const StyledButton = styled.button`
     width: 24vw;
     font-size: 1rem;
     border-radius: 30px;
-    padding: 18px 0;
+    padding: 18px 5px;
   `}
 `
 

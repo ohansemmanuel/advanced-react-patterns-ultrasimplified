@@ -30,6 +30,13 @@ export const StyledFloatingBtn = styled.button`
   right: 15px;
   font-size: 2.5rem;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+  font-family: 'Avenir';
+  font-weight: 300;
+  cursor: pointer;
+  text-align: center;
+  border: 0;
+  outline: 0;
+  color: #fff;
 `
 
 // "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"
