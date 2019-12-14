@@ -1,68 +1,67 @@
 ![Advanced React Patterns Ultrasimplified](assets/hero@3x.png)
 
-***Welcome to Advanced React Patterns Ultrasimplified!***  
+**_Welcome to Advanced React Patterns Ultrasimplified!_**
 
 Here I'll walk you through modern advanced react patterns in an intuitive fashion that models your day-to-day job as a Software Engineer.
-  
 
 ### [Want to jump into the code? Click here](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pulls)
 
 ---
 
+## What do you mean by 'Ultrasimplified'?
 
-### What do you mean by 'Ultrasimplified'?
-1. Real World Demos 
+### 1. Real World Demos 🚀
 
-You won't find basic hello world demos here. The demos have been intentionally designed to be actually helpful and **relatable**. 
+You won't find basic hello world demos here. The demos have been intentionally designed to be actually helpful and **relatable**.
 
 ![GIF of Medium clap demo](assets/explainer-demo.gif)
 
-2. Mimics your day-to-day job  
+### 2. Mimics your day-to-day job as a developer 🖥
 
-Each pattern is implemented and discussed via **a pull request**. View the PRs. Read the descriptions. Read the comments. Like you do at work! 
+Each pattern is implemented and discussed via **a pull request**. **View** the PRs. **Read** the descriptions. Read the **comments**. Like you do at work!
 
+### But I'm just a beginner. Isn't this too advanced?
 
-### But I'm just a beginner. Isn't this too advanced?   
-Every implementation is well explained with comments, diagrams and notes. You've got this. 
+Every implementation is well explained with comments, diagrams and notes. You've got this.
 
 ### [Wanna watch me teach this? Watch my video course.](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pulls)
 
+### How do I run the demos locally?
 
-### How do I run the demos locally? 
-1. Clone this repo 
+1. Clone this repo
 
-```sh 
+```sh
 git clone git@github.com:ohansemmanuel/advanced-react-patterns-ultrasimplified.git
 ```
 
 2. Change directory
 
 ```sh
-cd showcase 
+cd showcase
 ```
 
-3. Install dependencies 
+3. Install dependencies
 
 ```sh
-npm install 
+npm install
 ```
 
-or 
+or
 
 ```sh
-yarn install 
+yarn install
 ```
 
-4. Run the app 
+4. Run the app
 
 ```sh
-npm dev 
+npm dev
 ```
 
-or 
+or
 
 ```sh
-yarn dev 
+yarn dev
 ```
 
 ### Show me the PRs
