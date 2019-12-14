@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Router } from '@reach/router'
 import { HEADER_ALLOWANCE } from './utils/constants'
@@ -7,14 +7,21 @@ import {
   media,
   StyledFloatingBtn,
   StyledContentContainer,
+  StyledInfoContainer,
+  Header as StyledHeader,
   H1,
   Columns,
   Column,
   Box,
   CTAContainer
 } from './content/StyledContent'
-import GithubLogo from './assets/github_logo.svg'
 import Button from './Button'
+import { NOTES } from './constants/displayBoxNotes'
+import { INFO } from './constants/patternInfo'
+
+import GithubLogo from './assets/github_logo.svg'
+import InfoIllustration from './assets/light_bulb.svg'
+import { useAnimatedBulb } from './content/AnimatedBulb'
 
 const StyledAppBody = styled.div`
   background: #191921;
@@ -37,51 +44,85 @@ const patterns = [
   'state-reducers'
 ]
 
-const notes = {
-  '1': 'Animated via an HOC',
-  '2': 'Animated via a hook 💪'
-}
-
 const PR_ROOT =
   'https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull'
 const PR_IDs = [1, 16, 17, 19, 6, 7, 8, 9, 10, 12]
 const PRs = PR_IDs.map(id => `${PR_ROOT}/${id}`)
 
-const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
+const Header = ({ title, patternNumber }) => {
+  // animated el
+  const [lightBulbEl, setlightBulbEl] = useState(null)
+
+  const setLightBulbElRef = useCallback(node => {
+    if (node !== null) {
+      setlightBulbEl(node)
+    }
+  }, [])
+
+  const animatedBulbTimeline = useAnimatedBulb({
+    el: lightBulbEl
+  })
+
+  // toggle info display
+  const [isInfoShown, setInfoShown] = useState(false)
+
+  const toggleInfo = () => {
+    setInfoShown(isInfoShown => !isInfoShown)
+    animatedBulbTimeline.replay()
+  }
+
+  return (
+    <StyledHeader>
+      {isInfoShown && (
+        <StyledInfoContainer>{INFO[patternNumber]}</StyledInfoContainer>
+      )}
+      <H1>{title}</H1>
+      <div ref={setLightBulbElRef}>
+        <InfoIllustration
+          style={{ width: '30px', marginLeft: '5px', cursor: 'pointer' }}
+          onClick={toggleInfo}
+        />
+      </div>
+    </StyledHeader>
+  )
+}
+
+const RouteComponent = ({ pattern, patternNumber, isMediumOrLarger }) => {
   const firstLetterCap = str => str.slice(0, 1).toUpperCase() + str.slice(1)
   const title = pattern
     .split('-')
     .map(firstLetterCap)
     .join(' ')
 
-  const transformIndex = i => (i < 10 ? `0${i}` : i)
-  const indexes = [index, index + 1].map(transformIndex)
+  const indexToTwoDigits = i => (i < 10 ? `0${i}` : i)
+  const beforeAndAfterPatternNumbers = [patternNumber, patternNumber + 1].map(
+    indexToTwoDigits
+  )
 
   // Demo to be shown in Display Boxes
   let Demo1, Demo2
   try {
-    Demo1 = require(`./patterns/${indexes[0]}`).default
+    Demo1 = require(`./patterns/${beforeAndAfterPatternNumbers[0]}`).default
   } catch (error) {
     Demo1 = () => null
   }
   try {
-    Demo2 = require(`./patterns/${indexes[1]}`).default
+    Demo2 = require(`./patterns/${beforeAndAfterPatternNumbers[1]}`).default
   } catch (error) {
     Demo2 = () => null
   }
 
   const goToCodeImplementatiomn = () => {
-    const newWindow = window.open(PRs[index], 'blank')
+    const newWindow = window.open(PRs[patternNumber], 'blank')
     newWindow.opener = null
   }
 
   return (
     <StyledContentContainer>
-      <H1>{title}</H1>
-
+      <Header title={title} patternNumber={patternNumber} />
       <Columns>
         <Column>
-          <Box isPrimary note={notes[index]}>
+          <Box isPrimary note={NOTES[patternNumber]}>
             <Demo1 />
           </Box>
           {isMediumOrLarger && (
@@ -91,7 +132,10 @@ const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
           )}
         </Column>
         <Column leftGap>
-          <Box note={notes[index + 1]} m={!isMediumOrLarger && '15px 0 0 0'}>
+          <Box
+            note={NOTES[patternNumber + 1]}
+            m={!isMediumOrLarger && '15px 0 0 0'}
+          >
             <Demo2 />
           </Box>
           {!isMediumOrLarger && (
@@ -111,7 +155,6 @@ const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
     </StyledContentContainer>
   )
 }
-
 const Body = ({ setShowSidebar, isMediumOrLarger }) => {
   const toggleSidebar = () => setShowSidebar(val => !val)
 
@@ -121,10 +164,10 @@ const Body = ({ setShowSidebar, isMediumOrLarger }) => {
         <Home path='/' />
         {patterns.map((pattern, index) => (
           <RouteComponent
-            pattern={pattern}
-            index={index + 1}
             path={pattern}
             key={pattern}
+            pattern={pattern}
+            patternNumber={index + 1}
             isMediumOrLarger={isMediumOrLarger}
           />
         ))}

@@ -40,6 +40,18 @@ export const StyledFloatingBtn = styled.button`
   color: #fff;
 `
 
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${() => `${SIDEBAR_LEFT_PADDING}vw`};
+`
+
+export const StyledInfoContainer = styled.aside`
+  position: absolute;
+  top: 0;
+  background: red;
+`
+
 // "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"
 
 export const media = Object.keys(SCREEN_SIZES).reduce((accumulator, label) => {
@@ -67,7 +79,6 @@ export const H1 = styled.h1`
   color: ${() => `${ASH}`};
   padding: 0;
   margin: 0;
-  margin-bottom: ${() => `${SIDEBAR_LEFT_PADDING}vw`};
 `
 
 export const Columns = styled.div`
