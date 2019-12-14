@@ -56,8 +56,19 @@ const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
 
   const transformIndex = i => (i < 10 ? `0${i}` : i)
   const indexes = [index, index + 1].map(transformIndex)
-  const Demo1 = require(`./patterns/${indexes[0]}`).default
-  const Demo2 = require(`./patterns/${indexes[1]}`).default
+
+  // Demo to be shown in Display Boxes
+  let Demo1, Demo2
+  try {
+    Demo1 = require(`./patterns/${indexes[0]}`).default
+  } catch (error) {
+    Demo1 = () => null
+  }
+  try {
+    Demo2 = require(`./patterns/${indexes[1]}`).default
+  } catch (error) {
+    Demo2 = () => null
+  }
 
   const goToCodeImplementatiomn = () => {
     const newWindow = window.open(PRs[index], 'blank')
