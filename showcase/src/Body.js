@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useMediaQuery } from 'react-responsive'
+import React from 'react'
 import styled from 'styled-components'
 import { Router } from '@reach/router'
 import { HEADER_ALLOWANCE } from './utils/constants'
@@ -7,7 +6,6 @@ import { Home } from './content'
 import {
   media,
   StyledFloatingBtn,
-  SCREEN_SIZES,
   StyledContentContainer,
   H1,
   Columns,
@@ -44,11 +42,10 @@ const notes = {
   '2': 'Animated via a hook 💪'
 }
 
+const PR_ROOT =
+  'https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull'
 const PR_IDs = [1, 16, 17, 19, 6, 7, 8, 9, 10, 12]
-const PRs = PR_IDs.map(
-  id =>
-    `https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/${id}`
-)
+const PRs = PR_IDs.map(id => `${PR_ROOT}/${id}`)
 
 const RouteComponent = ({ pattern, index, isMediumOrLarger }) => {
   const firstLetterCap = str => str.slice(0, 1).toUpperCase() + str.slice(1)
