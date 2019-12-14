@@ -9,7 +9,7 @@ export const StyledButton = styled.button`
   font-size: 0.85rem;
   border-radius: 10px;
   padding: 9px 0;
-  font-family: 'Avenir';
+  font-family: Avenir, Nunito, sans-serif;
   font-weight: 300;
   cursor: pointer;
   text-align: center;

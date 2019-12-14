@@ -31,7 +31,7 @@ export const StyledFloatingBtn = styled.button`
   right: 15px;
   font-size: 2.5rem;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
-  font-family: 'Avenir';
+  font-family: Avenir, Nunito, sans-serif;
   font-weight: 300;
   cursor: pointer;
   text-align: center;
@@ -84,7 +84,7 @@ export const Column = styled.div`
   ${media.md` 
     width: ${() => `${COLUMN_WIDTH}vw`}
     margin-left: ${({ leftGap }) =>
-    leftGap ? `${SIDEBAR_LEFT_PADDING}vw` : 'initial'};
+      leftGap ? `${SIDEBAR_LEFT_PADDING}vw` : 'initial'};
   `}
 `
 
