@@ -21,6 +21,18 @@ export const SCREEN_SIZES = {
   xl: 1140
 }
 
+export const media = Object.keys(SCREEN_SIZES).reduce((accumulator, label) => {
+  // use em in breakpoints to work properly cross-browser and support users
+  // changing their browsers font-size: https://zellwk.com/blog/media-query-units/
+  const emSize = SCREEN_SIZES[label] / 16
+  accumulator[label] = (...args) => css`
+    @media (min-width: ${emSize}em) {
+      ${css(...args)};
+    }
+  `
+  return accumulator
+}, {})
+
 export const StyledFloatingBtn = styled.button`
   background: ${() => PALE_RED};
   width: 71px;
@@ -47,24 +59,27 @@ export const Header = styled.div`
 `
 
 export const StyledInfoContainer = styled.aside`
-  position: absolute;
-  top: 0;
-  background: red;
+  overflow: hidden;
+  padding: 5px;
+  z-index: 10;
+  position: fixed;
+  top: initial;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: 0;
+  background: #191921;
+  border-top: 1px solid white;
+
+  ${media.md`
+    position: absolute;
+    top: 20px;
+    bottom: initial;
+    right: initial;
+    left: initial;
+    border: 1px solid white;
+`}
 `
-
-// "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"
-
-export const media = Object.keys(SCREEN_SIZES).reduce((accumulator, label) => {
-  // use em in breakpoints to work properly cross-browser and support users
-  // changing their browsers font-size: https://zellwk.com/blog/media-query-units/
-  const emSize = SCREEN_SIZES[label] / 16
-  accumulator[label] = (...args) => css`
-    @media (min-width: ${emSize}em) {
-      ${css(...args)};
-    }
-  `
-  return accumulator
-}, {})
 
 export const StyledContentContainer = styled.div`
   padding: ${() => `${HEADER_ALLOWANCE}vh ${SIDEBAR_LEFT_PADDING}vw`};

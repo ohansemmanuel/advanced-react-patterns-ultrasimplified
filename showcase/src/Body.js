@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { Router } from '@reach/router'
 import { HEADER_ALLOWANCE } from './utils/constants'
@@ -21,7 +21,8 @@ import { INFO } from './constants/patternInfo'
 
 import GithubLogo from './assets/github_logo.svg'
 import InfoIllustration from './assets/light_bulb.svg'
-import { useAnimatedBulb } from './content/AnimatedBulb'
+import { useAnimatedBulb } from './content/useAnimatedBulb'
+import { useAnimatedInfo } from './content/useAnimatedInfo'
 
 const StyledAppBody = styled.div`
   background: #191921;
@@ -51,16 +52,23 @@ const PRs = PR_IDs.map(id => `${PR_ROOT}/${id}`)
 
 const Header = ({ title, patternNumber }) => {
   // animated el
-  const [lightBulbEl, setlightBulbEl] = useState(null)
+  const [{ lightBulbEl, infoEl, infoTextEl }, setRefState] = useState({})
 
-  const setLightBulbElRef = useCallback(node => {
+  const setRef = useCallback(node => {
     if (node !== null) {
-      setlightBulbEl(node)
+      setRefState(prevRefState => ({
+        ...prevRefState,
+        [node.dataset.refkey]: node
+      }))
     }
   }, [])
 
   const animatedBulbTimeline = useAnimatedBulb({
     el: lightBulbEl
+  })
+  const animatedInfoTimeline = useAnimatedInfo({
+    bgEl: infoEl,
+    textEl: infoTextEl
   })
 
   // toggle info display
@@ -71,13 +79,29 @@ const Header = ({ title, patternNumber }) => {
     animatedBulbTimeline.replay()
   }
 
+  useEffect(() => {
+    if (!isInfoShown) {
+      return
+    }
+
+    const timer = setTimeout(() => {
+      animatedInfoTimeline.replay()
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [isInfoShown])
+
   return (
     <StyledHeader>
       {isInfoShown && (
-        <StyledInfoContainer>{INFO[patternNumber]}</StyledInfoContainer>
+        <StyledInfoContainer ref={setRef} data-refkey='infoEl'>
+          <p ref={setRef} data-refkey='infoTextEl'>
+            {INFO[patternNumber]}
+          </p>
+        </StyledInfoContainer>
       )}
       <H1>{title}</H1>
-      <div ref={setLightBulbElRef}>
+      <div ref={setRef} data-refkey='lightBulbEl'>
         <InfoIllustration
           style={{ width: '30px', marginLeft: '5px', cursor: 'pointer' }}
           onClick={toggleInfo}
@@ -155,6 +179,7 @@ const RouteComponent = ({ pattern, patternNumber, isMediumOrLarger }) => {
     </StyledContentContainer>
   )
 }
+
 const Body = ({ setShowSidebar, isMediumOrLarger }) => {
   const toggleSidebar = () => setShowSidebar(val => !val)
 

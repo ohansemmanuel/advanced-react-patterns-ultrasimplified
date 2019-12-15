@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import mojs from 'mo-js'
 
 export const useAnimatedBulb = ({ el }) => {
