@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react'
 import mojs from 'mo-js'
+import MojsPlayer from '@mojs/player'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
@@ -89,6 +90,11 @@ const withClapAnimation = WrappedComponent => {
         circleBurst,
         triangleBurst
       ])
+
+      // add the timeline to the player
+      new MojsPlayer({
+        add: this.state.animationTimeline
+      })
     }
 
     render () {
