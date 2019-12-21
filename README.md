@@ -2,9 +2,11 @@
 
 **Welcome to Advanced React Patterns Ultrasimplified!**
 
-Here I'll walk you through modern advanced react patterns in an intuitive fashion that models your day-to-day job as a Software Engineer.
+Here I'll walk you through modern advanced react patterns in an intuitive fashion that models your day-to-day job as a Software Engineer - Pull requests!
 
-### 🖥 [Want to see the demo site? Click here](https://advanced-react-patterns-ultrasimplified.netlify.com/)
+![Demo Site](https://i.imgur.com/CQmSnrr.gif)
+
+### 🖥 Want to see the demo site? 👉 [advanced-react-patterns-ultrasimplified.netlify.com](https://advanced-react-patterns-ultrasimplified.netlify.com/)
 
 ---
 
@@ -20,7 +22,7 @@ You won't find basic hello world demos here. The demos have been intentionally d
 
 Each pattern is implemented and discussed via **a pull request**. **View** the PRs. **Read** the descriptions. Read the **comments**. Like you do at work!
 
-## Coming from my Udemy Course?
+## Coming from my [Udemy Course](https://forms.gle/gU1HA7vwy2j1JvvZ6)?
 
 - The branch we start off from is branch `clean-slate`. [See branch](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/tree/clean-slate)
 - The development DEMO site lives here: https://dev-advanced-react-patterns-ultrasimplified.netlify.com/
@@ -29,7 +31,7 @@ Each pattern is implemented and discussed via **a pull request**. **View** the P
 
 Every implementation is well explained with comments, diagrams and notes (in progress). You've got this.
 
-### [Wanna watch me teach this? View my udemy course.](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pulls)
+### [Wanna watch me teach this? View my udemy course.](https://forms.gle/gU1HA7vwy2j1JvvZ6)
 
 ## How do I run the demos locally?
 
@@ -70,6 +72,24 @@ yarn dev
 ```
 
 ## The Patterns implemented (PRs)
+
+### 1. [The Medium Clap](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/1)
+
+### 2. [Compound Components](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/17)
+
+### 3. [Reusable Styles](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/19)
+
+### 4. [Control Props](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/6)
+
+### 5. [Custom Hooks](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/7)
+
+### 6. [Props Collection](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/8)
+
+### 7. [Prop Getters](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/9)
+
+### 8. [State Initializers](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/10)
+
+### 9. [State Reducers](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/12)
 
 ---
 
