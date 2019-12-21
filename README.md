@@ -4,8 +4,6 @@
 
 Here I'll walk you through modern advanced react patterns in an intuitive fashion that models your day-to-day job as a Software Engineer - Pull requests!
 
-![Demo Site](https://i.imgur.com/CQmSnrr.gif)
-
 ### 🖥 Want to see the demo site? 👉 [advanced-react-patterns-ultrasimplified.netlify.com](https://advanced-react-patterns-ultrasimplified.netlify.com/)
 
 ---
