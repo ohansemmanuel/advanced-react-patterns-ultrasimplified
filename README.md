@@ -71,7 +71,10 @@ yarn dev
 
 ## The Patterns implemented (PRs)
 
-### 1. [The Medium Clap](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/1)
+### 1. The Medium Clap
+
+- [Initial implementation with class component](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/1)
+- [Refactor to custom hooks](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/16)
 
 ### 2. [Compound Components](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/17)
 
