@@ -23,7 +23,7 @@ const withClapAnimation = WrappedComponent => {
         el: '#clap',
         duration: 300,
         scale: { 1.3: 1 },
-        easing: mojs.easing.out
+        easing: mojs.easing.ease.out
       })
 
       const newAnimationTimeline = this.animationTimeline.add([scaleButton])
