@@ -9,8 +9,9 @@ Higher Order Component for Animation
 ==================================== **/
 const withClapAnimation = WrappedComponent => {
   class WithClapAnimation extends Component {
+    animationTimeline = new mojs.Timeline()
     state = {
-      animationTimeline: new mojs.Timeline()
+      animationTimeline: this.animationTimeline
     }
 
     componentDidMount () {
@@ -82,13 +83,15 @@ const withClapAnimation = WrappedComponent => {
 
       const clap = document.getElementById('clap')
       clap.style.transform = 'scale(1, 1)'
-      this.state.animationTimeline.add([
+
+      const newAnimationTimeline = this.animationTimeline.add([
         countAnimation,
         countTotalAnimation,
         scaleButton,
         circleBurst,
         triangleBurst
       ])
+      this.setState({ animationTimeline: newAnimationTimeline })
     }
 
     render () {
