@@ -155,7 +155,6 @@ const MediumClap = ({ children, onClap }) => {
   })
 
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
 
     setClapState({
