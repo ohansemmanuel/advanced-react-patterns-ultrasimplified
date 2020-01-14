@@ -172,6 +172,7 @@ const MediumClap = ({ children, onClap }) => {
     componentJustMounted.current = false
   }, [count, onClap])
 
+
   const memoizedValue = useMemo(
     () => ({
       ...clapState,
