@@ -10,7 +10,6 @@ import React, {
 } from 'react'
 
 import mojs from 'mo-js'
-import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
@@ -175,12 +174,10 @@ const MediumClap = ({ children, onClap }) => {
 
   const memoizedValue = useMemo(
     () => ({
-      count,
-      countTotal,
-      isClicked,
+      ...clapState,
       setRef
     }),
-    [count, countTotal, isClicked, setRef]
+    [clapState, setRef]
   )
 
   return (
@@ -235,25 +232,18 @@ const CountTotal = () => {
   )
 }
 
-const ClapInfo = ({ info }) => {
-  const { countTotal } = useContext(MediumClapContext)
-  return (
-    <div className={styles.info}>
-      {info || wordConverter.toWords(countTotal)} claps!
-    </div>
-  )
-}
-
 MediumClap.Icon = ClapIcon
 MediumClap.Count = ClapCount
 MediumClap.Total = CountTotal
-MediumClap.Info = ClapInfo
 
 /** ====================================
       *        🔰USAGE
       Below's how a potential user
       may consume the component API
   ==================================== **/
+const Info = ({ info }) => {
+  return <div className={styles.info}>{info}</div>
+}
 
 const Usage = () => {
   const [total, setTotal] = useState(0)
@@ -263,12 +253,16 @@ const Usage = () => {
   }
 
   return (
-    <MediumClap onClap={onClap}>
-      <MediumClap.Icon />
-      <MediumClap.Total />
-      <MediumClap.Count />
-      <MediumClap.Info info={`Your article has been clapped ${total} times`} />
-    </MediumClap>
+    <div style={{ width: '100%' }}>
+      <MediumClap onClap={onClap}>
+        <MediumClap.Icon />
+        <MediumClap.Total />
+        <MediumClap.Count />
+      </MediumClap>
+      {!!total && (
+        <Info info={`Your article has been clapped ${total} times`} />
+      )}
+    </div>
   )
 }
 
