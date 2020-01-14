@@ -259,7 +259,9 @@ const Usage = () => {
         <MediumClap.Total />
         <MediumClap.Count />
       </MediumClap>
-      {total && <Info info={`Your article has been clapped ${total} times`} />}
+      {!!total && (
+        <Info info={`Your article has been clapped ${total} times`} />
+      )}
     </>
   )
 }
