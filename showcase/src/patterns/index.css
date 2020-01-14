@@ -10,7 +10,7 @@
     user-select: none;
   }
 .clap:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
