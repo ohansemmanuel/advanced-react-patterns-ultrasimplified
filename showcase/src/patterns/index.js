@@ -253,7 +253,7 @@ const Usage = () => {
   }
 
   return (
-    <>
+    <div style={{ width: '100%' }}>
       <MediumClap onClap={onClap}>
         <MediumClap.Icon />
         <MediumClap.Total />
@@ -262,7 +262,7 @@ const Usage = () => {
       {!!total && (
         <Info info={`Your article has been clapped ${total} times`} />
       )}
-    </>
+    </div>
   )
 }
 
