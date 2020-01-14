@@ -8,7 +8,6 @@ import React, {
 } from 'react'
 
 import mojs from 'mo-js'
-import wordConverter from 'number-to-words'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
 
@@ -161,15 +160,13 @@ const MediumClap = ({ children }) => {
       isClicked: true
     })
   }
-  
+
   const memoizedValue = useMemo(
     () => ({
-      count,
-      countTotal,
-      isClicked,
+      ...clapState,
       setRef
     }),
-    [count, countTotal, isClicked, setRef]
+    [clapState, setRef]
   )
 
   return (
@@ -224,19 +221,9 @@ const CountTotal = () => {
   )
 }
 
-const ClapInfo = () => {
-  const { countTotal } = useContext(MediumClapContext)
-  return (
-    <div className={styles.info}>
-      {wordConverter.toWords(countTotal)} claps!
-    </div>
-  )
-}
-
 MediumClap.Icon = ClapIcon
 MediumClap.Count = ClapCount
 MediumClap.Total = CountTotal
-MediumClap.Info = ClapInfo
 
 /** ====================================
       *        🔰USAGE
@@ -250,7 +237,6 @@ const Usage = () => {
       <MediumClap.Icon />
       <MediumClap.Total />
       <MediumClap.Count />
-      <MediumClap.Info />
     </MediumClap>
   )
 }
