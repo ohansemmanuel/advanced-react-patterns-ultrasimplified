@@ -179,12 +179,10 @@ const MediumClap = ({
 
   const memoizedValue = useMemo(
     () => ({
-      count,
-      countTotal,
-      isClicked,
+      ...clapState,
       setRef
     }),
-    [count, countTotal, isClicked, setRef]
+    [clapState, setRef]
   )
 
   const classNames = [styles.clap, className].join(' ').trim()
@@ -274,6 +272,7 @@ MediumClap.Total = CountTotal
 const Info = ({ info }) => {
   return <div className={styles.info}>{info}</div>
 }
+
 const Usage = () => {
   const [total, setTotal] = useState(0)
 
