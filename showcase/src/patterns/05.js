@@ -1,18 +1,17 @@
 import React, {
   useState,
-  useEffect,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useContext,
-  useMemo,
   useRef,
+  useMemo,
   createContext
 } from 'react'
 
 import mojs from 'mo-js'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
-import userStyles from './usage.css'
 
 /** ====================================
    *          🔰Hook
@@ -99,7 +98,6 @@ const useClapAnimation = ({
     })
 
     if (typeof burstEl === 'string') {
-      const id = burstEl.slice(1, burstEl.length)
       const el = document.getElementById(id)
       el.style.transform = 'scale(1, 1)'
     } else {
@@ -143,7 +141,6 @@ const MediumClap = ({
   const { count, countTotal, isClicked } = clapState
 
   const [{ clapRef, clapCountRef, clapTotalRef }, setRefState] = useState({})
-
   const setRef = useCallback(node => {
     if (node !== null) {
       setRefState(prevRefState => ({
@@ -160,11 +157,11 @@ const MediumClap = ({
     burstEl: clapRef
   })
 
-  // Controlled Component ? isControlled = value !== undefined
+  // Controlled Component??
+  // isControlled = value !== undefined
   const isControlled = !!values
 
   const handleClapClick = () => {
-    // 👉 prop from HOC
     animationTimeline.replay()
     isControlled
       ? onClap()

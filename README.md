@@ -83,7 +83,7 @@ yarn dev
 
 ### 3. [Reusable Styles](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/19)
 
-### 4. [Control Props](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/6)
+### 4. [Control Props](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/21)
 
 ### 5. [Custom Hooks](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/7)
 
