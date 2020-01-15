@@ -1,11 +1,11 @@
 import React, {
   useState,
-  useEffect,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useContext,
-  useMemo,
   useRef,
+  useMemo,
   createContext
 } from 'react'
 
@@ -157,7 +157,8 @@ const MediumClap = ({
     burstEl: clapRef
   })
 
-  // Controlled Component ? isControlled = value !== undefined
+  // Controlled Component?? 
+  // isControlled = value !== undefined
   const isControlled = !!values
 
   const handleClapClick = () => {
