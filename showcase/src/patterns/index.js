@@ -12,7 +12,6 @@ import React, {
 import mojs from 'mo-js'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
-import userStyles from './usage.css'
 
 /** ====================================
    *          🔰Hook
@@ -99,7 +98,6 @@ const useClapAnimation = ({
     })
 
     if (typeof burstEl === 'string') {
-      clap.style.transform = 'scale(1, 1)'
       const el = document.getElementById(id)
       el.style.transform = 'scale(1, 1)'
     } else {
@@ -133,7 +131,8 @@ const { Provider } = MediumClapContext
 
 const MediumClap = ({
   children,
-  onClap,
+  onClap = () => {},
+  values = null,
   className = '',
   style: userStyles = {}
 }) => {
@@ -158,32 +157,42 @@ const MediumClap = ({
     burstEl: clapRef
   })
 
+  // Controlled Component?? 
+  // isControlled = value !== undefined
+  const isControlled = !!values
+
   const handleClapClick = () => {
     animationTimeline.replay()
-
-    setClapState({
-      count: Math.min(count + 1, MAXIMUM_USER_CLAP),
-      countTotal: count < MAXIMUM_USER_CLAP ? countTotal + 1 : countTotal,
-      isClicked: true
-    })
+    isControlled
+      ? onClap()
+      : setClapState({
+          count: Math.min(count + 1, MAXIMUM_USER_CLAP),
+          countTotal: count < MAXIMUM_USER_CLAP ? countTotal + 1 : countTotal,
+          isClicked: true
+        })
   }
 
   const componentJustMounted = useRef(true)
 
   useEffect(() => {
-    if (!componentJustMounted.current) {
+    if (!componentJustMounted.current && !isControlled) {
       onClap(clapState)
     }
     componentJustMounted.current = false
-  }, [count, onClap])
+  }, [count, onClap, isControlled])
 
-  const memoizedValue = useMemo(
-    () => ({
-      ...clapState,
+  const getState = useCallback(() => (isControlled ? values : clapState), [
+    isControlled,
+    clapState,
+    values
+  ])
+
+  const memoizedValue = useMemo(() => {
+    return {
+      ...getState(),
       setRef
-    }),
-    [clapState, setRef]
-  )
+    }
+  }, [getState, setRef])
 
   const classNames = [styles.clap, className].join(' ').trim()
 
@@ -269,28 +278,41 @@ MediumClap.Total = CountTotal
       Below's how a potential user
       may consume the component API
   ==================================== **/
-const Info = ({ info }) => {
-  return <div className={styles.info}>{info}</div>
+
+const MAXIMUM_USER_CLAP = 10
+const INITIAL_STATE = {
+  count: 0,
+  countTotal: 1206,
+  isClicked: false
 }
 
 const Usage = () => {
-  const [total, setTotal] = useState(0)
+  const [clapValues, setClapValues] = useState(INITIAL_STATE)
 
-  const onClap = ({ countTotal }) => {
-    setTotal(countTotal)
+  const onClap = () => {
+    setClapValues(({ count, countTotal }) => ({
+      count: Math.min(count + 1, MAXIMUM_USER_CLAP),
+      countTotal: count < MAXIMUM_USER_CLAP ? countTotal + 1 : countTotal,
+      isClicked: true
+    }))
   }
 
   return (
-    <div style={{ width: '100%' }}>
-      <MediumClap onClap={onClap} className={userStyles.clap}>
-        <MediumClap.Icon className={userStyles.icon} />
-        <MediumClap.Total className={userStyles.total} />
-        <MediumClap.Count className={userStyles.count} />
+    <section
+      style={{ display: 'flex', justifyContent: 'space-around', width: '60vw' }}
+    >
+      <MediumClap values={clapValues} onClap={onClap}>
+        <MediumClap.Icon />
+        <MediumClap.Count />
+        <MediumClap.Total />
       </MediumClap>
-      {!!total && (
-        <Info info={`Your article has been clapped ${total} times`} />
-      )}
-    </div>
+
+      <MediumClap className={styles.clap} values={clapValues} onClap={onClap}>
+        <MediumClap.Icon />
+        <MediumClap.Count />
+        <MediumClap.Total />
+      </MediumClap>
+    </section>
   )
 }
 
