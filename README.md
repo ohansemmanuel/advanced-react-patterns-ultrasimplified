@@ -76,7 +76,7 @@ yarn dev
 - [Initial implementation with class component](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/1)
 - [Refactor to custom hooks](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/16)
 
-### 2. [Compound Components](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/17)
+### 2. Compound Components
 
 - [Initial implementation](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/17)
 - [With Callback](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/18/)
