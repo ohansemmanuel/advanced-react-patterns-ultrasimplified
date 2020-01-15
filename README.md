@@ -78,6 +78,9 @@ yarn dev
 
 ### 2. [Compound Components](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/17)
 
+- [Initial implementation](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/17)
+- [With Callback](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/18/)
+
 ### 3. [Reusable Styles](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/19)
 
 ### 4. [Control Props](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/6)
