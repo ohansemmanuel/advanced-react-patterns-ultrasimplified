@@ -79,3 +79,9 @@
     stroke: #fff;
     stroke-width: 1px;
 }
+
+/* Clap Info */
+.info {
+  position: relative;
+  top: 47px;
+}

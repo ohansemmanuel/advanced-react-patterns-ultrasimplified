@@ -1,8 +1,10 @@
 import React, {
   useState,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useContext,
+  useRef,
   useMemo,
   createContext
 } from 'react'
@@ -128,7 +130,7 @@ const initialState = {
 const MediumClapContext = createContext()
 const { Provider } = MediumClapContext
 
-const MediumClap = ({ children }) => {
+const MediumClap = ({ children, onClap }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal, isClicked } = clapState
@@ -160,6 +162,16 @@ const MediumClap = ({ children }) => {
       isClicked: true
     })
   }
+
+  const componentJustMounted = useRef(true)
+
+  useEffect(() => {
+    if (!componentJustMounted.current) {
+      onClap(clapState)
+    }
+    componentJustMounted.current = false
+  }, [count, onClap])
+
 
   const memoizedValue = useMemo(
     () => ({
@@ -230,14 +242,28 @@ MediumClap.Total = CountTotal
       Below's how a potential user
       may consume the component API
   ==================================== **/
+const Info = ({ info }) => {
+  return <div className={styles.info}>{info}</div>
+}
 
 const Usage = () => {
+  const [total, setTotal] = useState(0)
+
+  const onClap = ({ countTotal }) => {
+    setTotal(countTotal)
+  }
+
   return (
-    <MediumClap>
-      <MediumClap.Icon />
-      <MediumClap.Total />
-      <MediumClap.Count />
-    </MediumClap>
+    <div style={{ width: '100%' }}>
+      <MediumClap onClap={onClap}>
+        <MediumClap.Icon />
+        <MediumClap.Total />
+        <MediumClap.Count />
+      </MediumClap>
+      {!!total && (
+        <Info info={`Your article has been clapped ${total} times`} />
+      )}
+    </div>
   )
 }
 
