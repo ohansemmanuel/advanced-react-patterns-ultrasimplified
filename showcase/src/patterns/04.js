@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import mojs from 'mo-js'
 import styles from './index.css'
-import userStyles from './usage.css'
+import userCustomStyles from './usage.css'
 
 const initialState = {
   count: 0,
@@ -117,8 +117,8 @@ const { Provider } = MediumClapContext
 const MediumClap = ({
   children,
   onClap,
-  className = '',
-  style: userStyles = {}
+  style: userStyles = {},
+  className
 }) => {
   const MAXIMUM_USER_CLAP = 50
   const [clapState, setClapState] = useState(initialState)
@@ -177,7 +177,7 @@ const MediumClap = ({
         data-refkey='clapRef'
         className={classNames}
         onClick={handleClapClick}
-        styles={userStyles}
+        style={userStyles}
       >
         {children}
       </button>
@@ -189,8 +189,9 @@ const MediumClap = ({
  * subcomponents
  */
 
-const ClapIcon = ({ className = '', style: userStyles = {} }) => {
+const ClapIcon = ({ style: userStyles = {}, className }) => {
   const { isClicked } = useContext(MediumClapContext)
+
   const classNames = [styles.icon, isClicked ? styles.checked : '', className]
     .join(' ')
     .trim()
@@ -209,7 +210,7 @@ const ClapIcon = ({ className = '', style: userStyles = {} }) => {
     </span>
   )
 }
-const ClapCount = ({ className = '', style: userStyles = {} }) => {
+const ClapCount = ({ style: userStyles = {}, className }) => {
   const { count, setRef } = useContext(MediumClapContext)
   const classNames = [styles.count, className].join(' ').trim()
 
@@ -225,7 +226,7 @@ const ClapCount = ({ className = '', style: userStyles = {} }) => {
   )
 }
 
-const CountTotal = ({ className = '', style: userStyles = {} }) => {
+const CountTotal = ({ style: userStyles = {}, className }) => {
   const { countTotal, setRef } = useContext(MediumClapContext)
   const classNames = [styles.total, className].join(' ').trim()
 
@@ -256,10 +257,10 @@ const Usage = () => {
   }
   return (
     <div style={{ width: '100%' }}>
-      <MediumClap onClap={handleClap} className={userStyles.clap}>
-        <MediumClap.Icon className={userStyles.icon} />
-        <MediumClap.Count className={userStyles.count} />
-        <MediumClap.Total className={userStyles.count} />
+      <MediumClap onClap={handleClap} className={userCustomStyles.clap}>
+        <MediumClap.Icon className={userCustomStyles.icon} />
+        <MediumClap.Count className={userCustomStyles.count} />
+        <MediumClap.Total className={userCustomStyles.total} />
       </MediumClap>
       {!!count && (
         <div className={styles.info}>{`You have clapped ${count} times`}</div>
