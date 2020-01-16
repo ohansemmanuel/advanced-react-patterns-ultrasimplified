@@ -259,21 +259,43 @@ MediumClap.Total = CountTotal
  * Usage
  */
 // import MediumClap from 'medium-clap'
+const INITIAL_STATE = {
+  count: 0,
+  countTotal: 2100,
+  isClicked: false
+}
+const MAXIMUM_CLAP_VAL = 10
+
 const Usage = () => {
-  const [count, setCount] = useState(0)
-  const handleClap = clapState => {
-    setCount(clapState.count)
+  const [state, setState] = useState(INITIAL_STATE)
+  const handleClap = () => {
+    setState(({ count, countTotal }) => ({
+      count: Math.min(count + 1, MAXIMUM_CLAP_VAL),
+      countTotal: count < MAXIMUM_CLAP_VAL ? countTotal + 1 : countTotal,
+      isClicked: true
+    }))
   }
+
   return (
     <div style={{ width: '100%' }}>
-      <MediumClap onClap={handleClap} className={userCustomStyles.clap}>
+      <MediumClap
+        values={state}
+        onClap={handleClap}
+        className={userCustomStyles.clap}
+      >
         <MediumClap.Icon className={userCustomStyles.icon} />
         <MediumClap.Count className={userCustomStyles.count} />
         <MediumClap.Total className={userCustomStyles.total} />
       </MediumClap>
-      {!!count && (
-        <div className={styles.info}>{`You have clapped ${count} times`}</div>
-      )}
+      <MediumClap
+        values={state}
+        onClap={handleClap}
+        className={userCustomStyles.clap}
+      >
+        <MediumClap.Icon className={userCustomStyles.icon} />
+        <MediumClap.Count className={userCustomStyles.count} />
+        <MediumClap.Total className={userCustomStyles.total} />
+      </MediumClap>
     </div>
   )
 }
