@@ -6,6 +6,8 @@ Here I'll walk you through modern advanced react patterns in an intuitive fashio
 
 ### 🖥 Want to see the demo site? 👉 [advanced-react-patterns-ultrasimplified.netlify.com](https://advanced-react-patterns-ultrasimplified.netlify.com/)
 
+### 👀 Want to see the udemy course? 👉 [https://www.udemy.com/](https://www.udemy.com/)
+
 ---
 
 ## What do you mean by 'Ultrasimplified'?
@@ -28,8 +30,6 @@ Each pattern is implemented and discussed via **a pull request**. **View** the P
 ## But I'm just a beginner. Isn't this too advanced?
 
 Every implementation is well explained with comments, diagrams and notes (in progress). You've got this.
-
-### [Wanna watch me teach this? View my udemy course.](https://forms.gle/gU1HA7vwy2j1JvvZ6)
 
 ## How do I run the demos locally?
 
