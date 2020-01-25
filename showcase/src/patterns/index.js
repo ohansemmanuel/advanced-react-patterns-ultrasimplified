@@ -96,7 +96,6 @@ const useClapAnimation = ({
     })
 
     if (typeof burstEl === 'string') {
-      const id = burstEl.slice(1, burstEl.length)
       const el = document.getElementById(id)
       el.style.transform = 'scale(1, 1)'
     } else {
