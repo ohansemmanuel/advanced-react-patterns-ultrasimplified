@@ -1,0 +1,24 @@
+.cupContainer {
+    width: 100px;
+    min-height: 100px;
+    text-align: center;
+}
+
+.cupBody {
+    display: flex;
+}
+.cupStream > svg{
+    height: 40px;
+}
+.cupBody > svg {
+    min-height: 50px;
+}
+/* 1. cup handle  2. cup bowl*/
+.cupBody > svg:nth-child(1) {
+    width: 20%;
+}
+.cupBody > svg:nth-child(2) {
+    width: 80%;
+    position: relative;
+    right: 10px;
+}
