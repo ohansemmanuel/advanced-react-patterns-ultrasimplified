@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import mojs from 'mo-js'
 import styles from './index.css'
+import userStyles from './usage.css'
 
 const INITIAL_STATE = {
   count: 0,
@@ -122,12 +123,19 @@ const useDOMRef = () => {
 
   return [DOMRef, setRef]
 }
+// const handleClick = (evt) => { ... }
+// <button onClick={handleClick} />
+const callFnsInSequence = (...fns) => (...args) => {
+  fns.forEach(fn => fn && fn(...args))
+}
 
 /**
  * custom hook for useClapState
  */
 const useClapState = (initialState = INITIAL_STATE) => {
   const MAXIMUM_USER_CLAP = 50
+  const userInitialState = useRef(initialState)
+
   const [clapState, setClapState] = useState(initialState)
   const { count, countTotal } = clapState
 
@@ -139,19 +147,25 @@ const useClapState = (initialState = INITIAL_STATE) => {
     }))
   }, [count, countTotal])
 
-  const togglerProps = {
-    onClick: updateClapState,
-    'aria-pressed': clapState.isClicked
-  }
+  const reset = useCallback(() => {
+    setClapState(userInitialState.current)
+  }, [setClapState])
 
-  const counterProps = {
+  const getTogglerProps = ({ onClick, ...otherProps } = {}) => ({
+    onClick: callFnsInSequence(updateClapState, onClick),
+    'aria-pressed': clapState.isClicked,
+    ...otherProps
+  })
+
+  const getCounterProps = ({ ...otherProps }) => ({
     count,
     'aria-valuemax': MAXIMUM_USER_CLAP,
     'aria-valuemin': 0,
-    'aria-valuenow': count
-  }
+    'aria-valuenow': count,
+    ...otherProps
+  })
 
-  return { clapState, updateClapState, togglerProps, counterProps }
+  return { clapState, updateClapState, getTogglerProps, getCounterProps, reset }
 }
 
 /**
@@ -216,8 +230,16 @@ const CountTotal = ({ countTotal, setRef, ...restProps }) => {
 /**
  * Usage
  */
+const userInitialState = {
+  count: 0,
+  countTotal: 1000,
+  isClicked: false
+}
+
 const Usage = () => {
-  const { clapState, togglerProps, counterProps } = useClapState()
+  const { clapState, getTogglerProps, getCounterProps, reset } = useClapState(
+    userInitialState
+  )
 
   const { count, countTotal, isClicked } = clapState
 
@@ -233,17 +255,41 @@ const Usage = () => {
     animationTimeline.replay()
   }, [count])
 
+  const handleClick = () => {
+    console.log('CLICKED!!!!')
+  }
+
   return (
-    <ClapContainer setRef={setRef} data-refkey='clapRef' {...togglerProps}>
-      <ClapIcon isClicked={isClicked} />
-      <ClapCount setRef={setRef} data-refkey='clapCountRef' {...counterProps} />
-      <CountTotal
-        countTotal={countTotal}
+    <div>
+      <ClapContainer
         setRef={setRef}
-        data-refkey='clapTotalRef'
-      />
-    </ClapContainer>
+        data-refkey='clapRef'
+        {...getTogglerProps({
+          onClick: handleClick,
+          'aria-pressed': false
+        })}
+      >
+        <ClapIcon isClicked={isClicked} />
+        <ClapCount
+          setRef={setRef}
+          data-refkey='clapCountRef'
+          {...getCounterProps()}
+        />
+        <CountTotal
+          countTotal={countTotal}
+          setRef={setRef}
+          data-refkey='clapTotalRef'
+        />
+      </ClapContainer>
+      <section>
+        <button onClick={reset} className={userStyles.resetBtn}>
+          reset
+        </button>
+        <pre className={userStyles.resetMsg}>
+          {JSON.stringify({ count, countTotal, isClicked })}
+        </pre>
+      </section>
+    </div>
   )
 }
-
 export default Usage

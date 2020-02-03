@@ -224,14 +224,9 @@ const CountTotal = ({ countTotal, setRef, ...restProps }) => {
  * Usage
  */
 const Usage = () => {
-  const {
-    clapState,
-    updateClapState,
-    getTogglerProps,
-    getCounterProps
-  } = useClapState()
+  const { clapState, getTogglerProps, getCounterProps } = useClapState()
 
-  const { count, countTotal, isClicked } = clapState
+  const { count, countTotal } = clapState
 
   const [{ clapRef, clapCountRef, clapTotalRef }, setRef] = useDOMRef()
 
@@ -273,5 +268,4 @@ const Usage = () => {
     </ClapContainer>
   )
 }
-
 export default Usage
