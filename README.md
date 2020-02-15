@@ -2,11 +2,11 @@
 
 **Welcome to Advanced React Patterns Ultrasimplified!**
 
-Here I'll walk you through modern advanced react patterns in an intuitive fashion that models your day-to-day job as a Software Engineer - Pull requests!
+Here, I'll walk you through advanced react component patterns in an intuitive fashion that models your day-to-day job as a Software Engineer - Pull requests!
 
 ### 🖥 Want to see the demo site? 👉 [advanced-react-patterns-ultrasimplified.netlify.com](https://advanced-react-patterns-ultrasimplified.netlify.com/)
 
-### 👀 Want to see the udemy course? 👉 [https://www.udemy.com/](https://www.udemy.com/)
+### 👀 Want to see the udemy course? 👉 [https://www.udemy.com/course/the-complete-guide-to-advanced-react-patterns/](https://www.udemy.com/course/the-complete-guide-to-advanced-react-patterns/)
 
 ---
 
@@ -22,10 +22,12 @@ You won't find basic hello world demos here. The demos have been intentionally d
 
 Each pattern is implemented and discussed via **a pull request**. **View** the PRs. **Read** the descriptions. Read the **comments**. Like you do at work!
 
-## Coming from my [Udemy Course](https://forms.gle/gU1HA7vwy2j1JvvZ6)?
+## Coming from my [Udemy Course](https://www.udemy.com/course/the-complete-guide-to-advanced-react-patterns/)?
 
 - The branch we start off from is branch `clean-slate`. [See branch](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/tree/clean-slate)
-- The development DEMO site lives here: https://dev-advanced-react-patterns-ultrasimplified.netlify.com/
+- Every lesson starts off in a new "clean-slate" branch e.g. "clean-slate-01", "clean-slate-02", "clean-slate-03" etc.
+
+* The development DEMO site lives here: https://dev-advanced-react-patterns-ultrasimplified.netlify.com/
 
 ## But I'm just a beginner. Isn't this too advanced?
 
