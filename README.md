@@ -95,6 +95,10 @@ yarn dev
 
 ### 9. [State Reducers](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/12)
 
+- [Initial refactor to useReducer](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/12)
+- [With user defined reducer](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/13)
+- [With type and reducer export](https://github.com/ohansemmanuel/advanced-react-patterns-ultrasimplified/pull/14)
+
 ---
 
 [![cc-by-4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
