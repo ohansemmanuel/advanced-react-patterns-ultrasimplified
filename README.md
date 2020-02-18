@@ -31,7 +31,9 @@ Each pattern is implemented and discussed via **a pull request**. **View** the P
 
 ## But I'm just a beginner. Isn't this too advanced?
 
-Every implementation is well explained with comments, diagrams and notes (in progress). You've got this.
+Ideally, **you're not new to React**. This is targetted more towards intermediate React engineers, but I'm sure a diligent beginner may work through these PRs as well.
+
+For ease, working through these patterns in a set of PRs allows you to focus on a bit at a time, with only new changes considered. Give it a try. It might turn out easier than you think.
 
 ## How do I run the demos locally?
 
