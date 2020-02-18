@@ -2,11 +2,13 @@
 
 **Welcome to Advanced React Patterns Ultrasimplified!**
 
-Here, I'll walk you through advanced react component patterns in an intuitive fashion that models your day-to-day job as a Software Engineer - Pull requests!
+Here, you'll be walked through advanced React Component Patterns in an intuitive fashion that models your day-to-day job as a Software Engineer - Pull requests!
 
-### 🖥 Want to see the demo site? 👉 [advanced-react-patterns-ultrasimplified.netlify.com](https://advanced-react-patterns-ultrasimplified.netlify.com/)
+## Helpful Links
 
-### 👀 Want to see the udemy course? 👉 [https://www.udemy.com/course/the-complete-guide-to-advanced-react-patterns/](https://www.udemy.com/course/the-complete-guide-to-advanced-react-patterns/)
+### 🖥 [The demo site](https://advanced-react-patterns-ultrasimplified.netlify.com/)
+
+### 👀 [The udemy course?](https://www.udemy.com/course/the-complete-guide-to-advanced-react-patterns/)
 
 ---
 
@@ -33,7 +35,7 @@ Each pattern is implemented and discussed via **a pull request**. **View** the P
 
 Ideally, **you're not new to React**. This is targetted more towards intermediate React engineers, but I'm sure a diligent beginner may work through these PRs as well.
 
-For ease, working through these patterns in a set of PRs allows you to focus on a bit at a time, with only new changes considered. Give it a try. It might turn out easier than you think.
+Some comforting words: working through these patterns in a set of PRs allows you to focus on a bit at a time, with only new changes considered. Give it a try. It might turn out easier than you think.
 
 ## How do I run the demos locally?
 
