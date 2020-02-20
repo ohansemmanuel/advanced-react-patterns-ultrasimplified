@@ -5,7 +5,7 @@ module.exports = merge(baseConfig, {
   mode: 'development',
   devServer: {
     port: 4646,
-    open: 'Google Chrome',
+    open: true,
     overlay: {
       warnings: true,
       errors: true
