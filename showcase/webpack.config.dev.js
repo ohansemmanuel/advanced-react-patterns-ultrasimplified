@@ -10,7 +10,8 @@ module.exports = merge(baseConfig, {
       warnings: true,
       errors: true
     },
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
   devtool: 'source-map'
 })
