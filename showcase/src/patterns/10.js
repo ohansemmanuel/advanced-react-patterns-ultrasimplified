@@ -175,6 +175,9 @@ const useClapState = (
   const resetRef = useRef(0)
   const prevCount = usePrevious(count)
   const reset = useCallback(() => {
+    // ⚠️ The video lesson had this wrapped in an if statement which I've removed ... 
+    // owing to the bug opened by Matija here https://www.udemy.com/instructor/communication/qa/9651560/detail/
+    
     dispatch({ type: 'reset', payload: userInitialState.current })
     resetRef.current++
   }, [prevCount, count, dispatch])
