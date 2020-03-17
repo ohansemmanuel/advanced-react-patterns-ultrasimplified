@@ -175,10 +175,8 @@ const useClapState = (
   const resetRef = useRef(0)
   const prevCount = usePrevious(count)
   const reset = useCallback(() => {
-    if (prevCount !== count) {
-      dispatch({ type: 'reset', payload: userInitialState.current })
-      resetRef.current++
-    }
+    dispatch({ type: 'reset', payload: userInitialState.current })
+    resetRef.current++
   }, [prevCount, count, dispatch])
 
   const getTogglerProps = ({ onClick, ...otherProps } = {}) => ({
