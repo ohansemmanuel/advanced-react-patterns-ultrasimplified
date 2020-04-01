@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { LIGHT_PURPLE, DARK_GREY } from './utils/constants'
+import { LIGHT_PURPLE, DARK_GREY, PALE_RED } from './utils/constants'
 import { media } from './content/StyledContent'
 
 export const StyledButton = styled.button`
@@ -18,7 +18,7 @@ export const StyledButton = styled.button`
   color: #fff;
 
   &:active {
-    border: 1px solid #fff;
+    color: ${() => `${PALE_RED}`};
   }
 
   > span {
