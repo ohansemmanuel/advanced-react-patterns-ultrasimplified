@@ -163,6 +163,9 @@ const useClapState = (initialState = INITIAL_STATE) => {
   const resetRef = useRef(0)
   const prevCount = usePrevious(count)
   const reset = useCallback(() => {
+    // Allow users call reset when they want. Managing any conditionals themselves 👇
+    // ⚠️ To prevent the bug where resets don't work after clicking beyond MAX_COUNT, 
+    // remove the if conditional below.  Thanks to @Nsquik for reporting this. 
     if (prevCount !== count) {
       setClapState(userInitialState.current)
       resetRef.current++
