@@ -167,6 +167,7 @@ const useClapState = (initialState = INITIAL_STATE) => {
     // ⚠️ To prevent the bug where resets don't work after clicking beyond MAX_COUNT, 
     // remove the if conditional below.  Thanks to @Nsquik for reporting this. 
     if (prevCount !== count) {
+      console.log({prevCount, count})
       setClapState(userInitialState.current)
       resetRef.current++
     }
@@ -325,7 +326,8 @@ const Usage = () => {
         />
       </ClapContainer>
       <section>
-        <button onClick={reset} className={userStyles.resetBtn}>
+        {/* to prevent uncanny bugs, disable the button while uploading by adding a "disabled" attribute as seen below 👇 */}
+        <button onClick={reset} className={userStyles.resetBtn} disabled={uploadingReset}>
           reset
         </button>
         <pre className={userStyles.resetMsg}>
