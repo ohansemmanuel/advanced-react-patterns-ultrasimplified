@@ -253,7 +253,8 @@ const Usage = () => {
   return (
     <ClapContainer
       setRef={setRef}
-      onClick={updateClapState}
+      // ⚠️ The handler should be handleClick NOT onClick as in the video recording
+      handleClick={updateClapState}
       data-refkey='clapRef'
     >
       {/* <ClapIcon isClicked={isClicked} /> */}
