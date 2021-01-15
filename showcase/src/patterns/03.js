@@ -91,19 +91,13 @@ const useClapAnimation = ({
     })
 
     const scaleButton = new mojs.Html({
-      el: burstEl,
-      duration: tlDuration,
+      el: clapEl,
+      duration: 0,
+    }).then({
       scale: { 1.3: 1 },
-      easing: mojs.easing.out
+      duration: tlDuration,
+      easing: mojs.easing.out,
     })
-
-    if (typeof burstEl === 'string') {
-      clap.style.transform = 'scale(1, 1)'
-      const el = document.getElementById(id)
-      el.style.transform = 'scale(1, 1)'
-    } else {
-      burstEl.style.transform = 'scale(1, 1)'
-    }
 
     const updatedAnimationTimeline = animationTimeline.add([
       countAnimation,
