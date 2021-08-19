@@ -66,7 +66,7 @@ yarn install
 4. Run the app
 
 ```sh
-npm dev
+npm run dev
 ```
 
 or
