@@ -1,6 +1,24 @@
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import styles from './index.css'
-const MediumClap = () => {
+
+
+//Higher Order Component
+const withClapAnimation = WrappedComponent => {
+  class WithClapAnimation extends Component {
+    //this handles animation logic
+    animate = () => {
+      console.log('%c Animate', 'background: yellow; color: black;')
+    }
+
+    render() {
+      return <WrappedComponent {...this.props} animate={this.animate} />
+    }
+  }
+  return WithClapAnimation
+}
+
+
+const MediumClap = ({ animate }) => {
   const MAXIMUM_USER_CLAP = 50
   const initialState = {
     isClicked: false,
@@ -11,6 +29,7 @@ const MediumClap = () => {
   const { isClicked, count, countTotal } = clapState;
 
   const handleClapClick = () => {
+    animate()
     setClapState((prevState) => ({
       isClicked: true,
       //math min will take in both values and evaluate which value is the minimum, it will then return the minimum value.
@@ -48,4 +67,9 @@ const ClapTotal = ({ countTotal }) => {
   return <span className={styles.total}>{countTotal}</span>
 }
 
-export default MediumClap;
+//Usage
+const Usage = () => {
+  const AnimatedMediumClap = withClapAnimation(MediumClap)
+  return <AnimatedMediumClap />;
+}
+export default Usage;
