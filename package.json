@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@mojs/core": "^1.1.0"
+  }
+}

@@ -1,24 +1,24 @@
 import React, { Component, useState } from "react";
 import styles from './index.css'
-
+import mojs from 'mo-js'
 
 //Higher Order Component
 const withClapAnimation = WrappedComponent => {
   class WithClapAnimation extends Component {
     //this handles animation logic
-    animate = () => {
-      console.log('%c Animate', 'background: yellow; color: black;')
+    state = {
+      animationTimeline: new mojs.Timeline()
     }
 
     render() {
-      return <WrappedComponent {...this.props} animate={this.animate} />
+      return <WrappedComponent {...this.props} animationTimeline={this.state.animationTimeline} />
     }
   }
   return WithClapAnimation
 }
 
 
-const MediumClap = ({ animate }) => {
+const MediumClap = ({ animationTimeline }) => {
   const MAXIMUM_USER_CLAP = 50
   const initialState = {
     isClicked: false,

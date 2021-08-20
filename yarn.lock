@@ -2,3 +2,21 @@
 # yarn lockfile v1
 
 
+"@babel/runtime@^7.14.0":
+  "integrity" "sha512-OvwMLqNXkCXSz1kSm58sEsNuhqOx/fKpnUnKnFB5v8uDda5bLNEHNgKPvhDN6IU0LDcnHQ90LlJ0Q6jnyBSIBA=="
+  "resolved" "https://registry.npmjs.org/@babel/runtime/-/runtime-7.15.3.tgz"
+  "version" "7.15.3"
+  dependencies:
+    "regenerator-runtime" "^0.13.4"
+
+"@mojs/core@^1.1.0":
+  "integrity" "sha512-KtcnnjOe69bxymsnS98nQbtoKspyd2DJblJql1OAZqiIBVA7dncYYW14ENWtD0mOfBmrC4c4r88PJUyliiH96Q=="
+  "resolved" "https://registry.npmjs.org/@mojs/core/-/core-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@babel/runtime" "^7.14.0"
+
+"regenerator-runtime@^0.13.4":
+  "integrity" "sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA=="
+  "resolved" "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz"
+  "version" "0.13.9"
