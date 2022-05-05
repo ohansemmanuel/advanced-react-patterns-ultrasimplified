@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@reach/router": "^1.2.1",
-    "cross-env": "^7.0.3",
     "mo-js": "^0.288.2",
     "number-to-words": "^1.2.4",
     "prop-types": "^15.7.2",
