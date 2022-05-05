@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js && cp _redirects dist",
-    "dev": "webpack-dev-server --watch --config webpack.config.dev.js",
+    "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server --watch --config webpack.config.dev.js",
     "deploy": "surge ./dist adv-react-patterns-ultra.surge.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@reach/router": "^1.2.1",
+    "cross-env": "^7.0.3",
     "mo-js": "^0.288.2",
     "number-to-words": "^1.2.4",
     "prop-types": "^15.7.2",
