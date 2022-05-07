@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js && cp _redirects dist",
-    "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server --watch --config webpack.config.dev.js",
+    "dev": "webpack-dev-server --watch --config webpack.config.dev.js",
     "deploy": "surge ./dist adv-react-patterns-ultra.surge.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -31,6 +31,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.5",
     "@reach/router": "^1.2.1",
     "mo-js": "^0.288.2",
     "number-to-words": "^1.2.4",
@@ -38,6 +39,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-hot-loader": "^4.12.15",
+    "react-popper": "^2.3.0",
     "react-responsive": "^8.0.1",
     "styled-components": "^4.4.0"
   }
