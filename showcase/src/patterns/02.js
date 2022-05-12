@@ -9,13 +9,12 @@ const initialState = {
 };
 
 /**
- * withAnimation is HOC component
- * hoc is component that get component and return new component with extra logic functionality
+ * custom hook for reuse logic in the component
  */
 
-const withAnimation = (Component) => {
+const useClapAnimation = () => {
   const [animationTimeline, setAnimationTimeline] = useState(
-    new mojs.Timeline()
+    () => new mojs.Timeline()
   );
 
   useEffect(() => {
@@ -92,10 +91,12 @@ const withAnimation = (Component) => {
     setAnimationTimeline(newAnimationTimeline);
   }, []);
 
-  return <Component animationTimeline={animationTimeline} />;
+  return animationTimeline;
 };
 
-const MediumClap = ({ animationTimeline }) => {
+const MediumClapWithCustomHook = () => {
+  const animationTimeline = useClapAnimation();
+
   const MAX_USER_CLAP = 12;
   const [clapState, setClapState] = useState(initialState);
 
@@ -155,6 +156,4 @@ const ClapTotal = ({ countTotal }) => {
   );
 };
 
-const MediumClapWithAnimation = () => withAnimation(MediumClap);
-
-export default MediumClapWithAnimation;
+export default MediumClapWithCustomHook;
